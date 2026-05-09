@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PORT STUDY — 선택과 집중 포트폴리오</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0C0F;--sf:#111418;--bd:#1E2328;--bd2:#2A3040;
+  --tx:#E8ECF0;--mu:#6B7280;--ac:#F0A500;--ac2:#E05A2B;
+  --gn:#2ECC71;--rd:#E74C3C;--bl:#3B82F6;--pu:#A855F7;
+  --fd:'Bebas Neue',sans-serif;--fb:'Noto Sans KR',sans-serif;--fm:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--fb);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(240,165,0,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(240,165,0,.02) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;z-index:0}
+
+/* ── TOP BAR ── */
+.top-bar{position:sticky;top:0;z-index:200;background:rgba(10,12,15,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd)}
+.tbi{display:flex;align-items:center;height:52px;padding:0 16px;gap:12px;max-width:1400px;margin:0 auto}
+.logo{font-family:var(--fd);font-size:22px;letter-spacing:.1em;color:var(--ac);white-space:nowrap;flex-shrink:0}
+.logo sub{font-family:var(--fm);font-size:9px;color:var(--mu);vertical-align:middle;margin-left:8px}
+.snav{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1}
+.snav::-webkit-scrollbar{display:none}
+.stab{display:flex;flex-direction:column;align-items:center;padding:5px 12px;border-radius:7px;cursor:pointer;
+  border:1px solid transparent;flex-shrink:0;transition:all .15s;user-select:none;position:relative}
+.stab:hover{background:rgba(240,165,0,.06);border-color:rgba(240,165,0,.18)}
+.stab.on{background:rgba(240,165,0,.1);border-color:var(--ac)}
+.stab.on::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--ac)}
+.tn{font-family:var(--fm);font-size:9px;color:var(--mu);margin-bottom:2px}
+.tnm{font-size:11px;font-weight:700;white-space:nowrap}.stab.on .tnm{color:var(--ac)}
+.tc{font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:1px}
+.trisk{display:flex;gap:2px;margin-top:2px}
+.td{width:4px;height:4px;border-radius:50%;background:var(--bd2)}
+.tdh{background:var(--rd)}.tdm{background:var(--ac)}.tdl{background:var(--gn)}
+
+/* ── PANELS ── */
+.panels{position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+
+/* ── HERO ── */
+.phero{padding:24px 16px 16px;max-width:1400px;margin:0 auto;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.phero-l{flex:1;min-width:240px}
+.badge-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.badge{font-family:var(--fm);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700}
+.bb{background:rgba(46,204,113,.15);color:var(--gn)}
+.bi2{background:rgba(59,130,246,.15);color:var(--bl)}
+.bm{background:rgba(240,165,0,.15);color:var(--ac)}
+.bd2b{background:rgba(224,90,43,.15);color:var(--ac2)}
+.bmed{background:rgba(168,85,247,.15);color:var(--pu)}
+.ben{background:rgba(16,185,129,.15);color:#10B981}
+.pdate{font-family:var(--fm);font-size:10px;color:var(--mu)}
+.pname{font-family:var(--fd);font-size:clamp(32px,5vw,60px);letter-spacing:.04em;line-height:.95;margin-bottom:5px}
+.pcode{font-family:var(--fm);font-size:11px;color:var(--mu);margin-bottom:10px}
+.pdesc{font-size:14px;color:var(--mu);line-height:1.65;max-width:500px}
+.phero-r{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;min-width:300px}
+@media(max-width:600px){.phero-r{grid-template-columns:repeat(2,1fr);min-width:unset;width:100%}}
+.kpi{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:9px 12px}
+.kpi-l{font-family:var(--fm);font-size:11px;color:var(--mu);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.kpi-v{font-size:18px;font-weight:900;font-family:var(--fm)}
+.kg{color:var(--gn)}.kr{color:var(--rd)}.ka{color:var(--ac)}.kw{color:#FFF}
+
+/* ── ALERT BOX ── */
+.alert{border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px}
+.alert-warn{background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.2)}
+.alert-info{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.2)}
+.alert-good{background:rgba(46,204,113,.07);border:1px solid rgba(46,204,113,.2)}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert-body{font-size:14px;line-height:1.7;color:var(--tx)}
+.alert-body b{font-weight:700}
+.alert-warn .alert-body{color:#F0A0A0}
+.alert-info .alert-body{color:#A8C5F8}
+.alert-good .alert-body{color:#90D4A0}
+
+/* ── SECTION NAV ── */
+.secnav{position:sticky;top:52px;z-index:100;background:rgba(10,12,15,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.secnav-in{display:flex;overflow-x:auto;scrollbar-width:none;max-width:1400px;margin:0 auto;padding:0 16px}
+.secnav-in::-webkit-scrollbar{display:none}
+.sb{font-family:var(--fm);font-size:12px;color:var(--mu);padding:10px 12px;border-bottom:2px solid transparent;
+  cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.sb:hover{color:var(--tx)}.sb.on{color:var(--ac);border-bottom-color:var(--ac)}
+
+/* ── CONTENT ── */
+.pcontent{max-width:1400px;margin:0 auto;padding:24px 16px 80px}
+.sec{margin-bottom:44px;scroll-margin-top:108px}
+.sec-hd{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.sn{font-family:var(--fm);font-size:12px;color:var(--ac);letter-spacing:.1em}
+.st{font-family:var(--fd);font-size:24px;letter-spacing:.06em}
+.sl{flex:1;height:1px;background:var(--bd)}
+
+/* ── GRID LAYOUTS ── */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:700px){.two,.three{grid-template-columns:1fr}}
+@media(min-width:701px) and (max-width:900px){.three{grid-template-columns:1fr 1fr}}
+
+/* ── CARDS ── */
+.ic{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px 16px}
+.ic-t{font-family:var(--fm);font-size:12px;color:var(--ac);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.kv{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)}
+.kv:last-child{border-bottom:none}
+.kk{font-size:13px;color:var(--mu);font-family:var(--fm)}
+.kv2{font-size:14px;font-weight:700}
+.vg{color:var(--gn)}.vr{color:var(--rd)}.va{color:var(--ac)}.vw{color:var(--tx)}
+
+/* ── CHART ── */
+.cw{background:var(--sf);border:1px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.ch{padding:9px 14px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.chl{font-family:var(--fm);font-size:12px;color:var(--mu);letter-spacing:.05em}
+.chr{font-family:var(--fm);font-size:12px;color:var(--ac)}
+.cb{position:relative;min-height:160px;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.cb img{width:100%;height:auto;display:block}
+.cph{display:flex;flex-direction:column;align-items:center;gap:8px;padding:32px;color:var(--mu)}
+.cph-i{font-size:28px;opacity:.2}
+.cph-t{font-family:var(--fm);font-size:12px;text-align:center;line-height:1.7}
+.cap{padding:8px 14px;font-size:13px;color:var(--mu);line-height:1.65;border-top:1px solid var(--bd)}
+.cap b{color:var(--tx)}
+
+/* ── TABLE ── */
+.tw{background:var(--sf);border:1px solid var(--bd);border-radius:10px;overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-family:var(--fm);font-size:11px;color:var(--mu);padding:8px 10px;text-align:right;border-bottom:1px solid var(--bd);white-space:nowrap;letter-spacing:.03em}
+th:first-child{text-align:left}
+td{padding:8px 11px;text-align:right;border-bottom:1px solid var(--bd);font-family:var(--fm);font-size:13px;font-weight:500}
+td:first-child{text-align:left;color:var(--mu);font-size:13px}
+tr:last-child td{border-bottom:none}
+tr.est td{background:rgba(240,165,0,.03)}
+tr.est td:first-child{color:var(--ac)}
+tr.hl td{background:rgba(46,204,113,.04)}
+tr.hl2 td{background:rgba(231,76,60,.04)}
+tr.bold td{font-weight:700}
+.pos{color:var(--gn)}.neg{color:var(--rd)}.amb{color:var(--ac)}
+
+/* ── MINI CHART BARS ── */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bar-row:last-child{margin-bottom:0}
+.bar-yr{font-family:var(--fm);font-size:12px;color:var(--mu);min-width:44px}
+.bar-wrap{flex:1;height:6px;background:var(--bd2);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;background:var(--bl);transition:width .3s}
+.bar-fill.est{background:var(--ac);opacity:.8}
+.bar-fill.neg-f{background:var(--rd)}
+.bar-val{font-family:var(--fm);font-size:12px;font-weight:700;min-width:44px;text-align:right}
+
+/* ── OUTLOOK ── */
+.og{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:480px){.og{grid-template-columns:1fr}}
+.oc{background:var(--sf);border:1px solid var(--bd);border-left:3px solid var(--ac);border-radius:8px;padding:12px 14px}
+.oc.wn{border-left-color:var(--rd)}.oc.gd{border-left-color:var(--gn)}.oc.nu{border-left-color:var(--pu)}
+.op{font-family:var(--fm);font-size:9px;color:var(--mu);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.opr{font-size:17px;font-weight:700;margin-bottom:3px}
+.od{font-size:13px;color:var(--mu)}
+
+/* ── BOXES ── */
+.sbox{background:rgba(240,165,0,.05);border:1px solid rgba(240,165,0,.16);border-radius:10px;padding:13px 16px;margin-top:12px}
+.sbox-t{font-family:var(--fm);font-size:11px;color:var(--ac);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.sbox p{font-size:14px;line-height:1.75}
+.gbox{background:rgba(46,204,113,.05);border:1px solid rgba(46,204,113,.16);border-radius:10px;padding:13px 16px;margin-top:12px}
+.gbox-t{font-family:var(--fm);font-size:11px;color:var(--gn);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.gbox p{font-size:14px;line-height:1.75}
+.nb{background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.16);border-radius:9px;padding:11px 14px;margin-bottom:12px}
+.nb p{font-size:13px;color:#A8C5F8;line-height:1.7}
+.nb b{color:var(--tx)}
+
+/* ── BULLETS ── */
+.bls{margin-bottom:18px}
+.blt{font-family:var(--fm);font-size:11px;color:var(--mu);letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.blt::after{content:'';flex:1;height:1px;background:var(--bd)}
+.bl{display:flex;flex-direction:column;gap:7px}
+.bi3{display:flex;gap:9px;align-items:flex-start}
+.dot{width:5px;height:5px;border-radius:50%;margin-top:7px;flex-shrink:0}
+.dg{background:var(--gn)}.dr{background:var(--rd)}.db{background:var(--bl)}.da{background:var(--ac)}.dp{background:var(--pu)}
+.bt2{font-size:14px;color:#CDD0D5;line-height:1.6}
+.bt2 b{color:var(--tx)}
+
+/* ── COMPETITOR ── */
+.ctag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle}
+.ctag-o{background:rgba(240,165,0,.2);color:var(--ac)}
+.ctag-l{background:rgba(46,204,113,.15);color:var(--gn)}
+.ctag-r{background:rgba(231,76,60,.15);color:var(--rd)}
+tr.ch-row td{background:rgba(240,165,0,.04)}
+
+/* ── VALUATION ── */
+.vg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.vg2{grid-template-columns:1fr}}
+.vc{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:16px}
+.vt{font-family:var(--fm);font-size:9px;color:var(--ac);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.slg{margin-bottom:11px}
+.sll{display:flex;justify-content:space-between;margin-bottom:4px}
+.sll span{font-family:var(--fm);font-size:10px;color:var(--mu)}
+.sll b{font-family:var(--fm);font-size:10px;color:var(--tx)}
+input[type=range]{width:100%;height:4px;background:var(--bd2);border-radius:2px;outline:none;-webkit-appearance:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--ac);cursor:pointer}
+.vres{margin-top:12px;padding:11px;background:var(--bg);border-radius:8px;border:1px solid var(--bd2);text-align:center}
+.vrl{font-family:var(--fm);font-size:9px;color:var(--mu);letter-spacing:.08em;margin-bottom:4px}
+.vrn{font-family:var(--fd);font-size:32px;letter-spacing:.04em}
+.vrsub{font-size:10px;color:var(--mu);margin-top:3px;font-family:var(--fm)}
+
+/* ── RISK ── */
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+@media(max-width:480px){.rg{grid-template-columns:1fr}}
+.ri{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:9px}
+.rs{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:12px;font-weight:700;flex-shrink:0}
+.rsh{background:rgba(231,76,60,.15);color:var(--rd)}
+.rsm{background:rgba(240,165,0,.15);color:var(--ac)}
+.rsl{background:rgba(46,204,113,.15);color:var(--gn)}
+.rn{font-size:13px;font-weight:700;margin-bottom:2px}
+.rd2{font-size:12px;color:var(--mu);line-height:1.4}
+.rtbar{flex:1;height:6px;background:var(--bd2);border-radius:3px;overflow:hidden}
+.rtfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gn),var(--ac),var(--rd))}
+
+/* ── TIMELINE ── */
+.tline{position:relative;padding-left:16px}
+.tline::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:1px;background:var(--bd2)}
+.tli{position:relative;margin-bottom:14px;padding-left:12px}
+.tld{position:absolute;left:-20px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--ac);border:2px solid var(--bg)}
+.tld.r{background:var(--rd)}.tld.g{background:var(--gn)}.tld.b{background:var(--bl)}.tld.mu{background:var(--mu)}.tld.p{background:var(--pu)}
+.tldate{font-family:var(--fm);font-size:10px;color:var(--mu);margin-bottom:2px}
+.tltitle{font-size:13px;font-weight:700;margin-bottom:2px;line-height:1.3}
+.tlbody{font-size:12px;color:var(--mu);line-height:1.6}
+.tltag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:6px;vertical-align:middle;font-family:var(--fm)}
+.tg{background:rgba(46,204,113,.15);color:var(--gn)}
+.tb{background:rgba(231,76,60,.15);color:var(--rd)}
+.tn2{background:rgba(107,114,128,.15);color:var(--mu)}
+.tp{background:rgba(168,85,247,.15);color:var(--pu)}
+
+/* ── STAT HIGHLIGHT ── */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+@media(max-width:600px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+.stat-box{background:var(--sf);border:1px solid var(--bd);border-radius:9px;padding:12px 14px;text-align:center}
+.stat-num{font-family:var(--fd);font-size:28px;letter-spacing:.04em;line-height:1}
+.stat-lbl{font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:4px;letter-spacing:.04em}
+
+/* FOOTER */
+.pfooter{border-top:1px solid var(--bd);padding:16px;text-align:center;font-family:var(--fm);font-size:10px;color:var(--mu);position:relative;z-index:1}
+.pfooter b{color:var(--ac)}
+@media(max-width:600px){.phero{padding:16px 12px};.pcontent{padding:16px 12px 60px}.logo sub{display:none}.stab{padding:4px 8px}.tc{display:none}}
+
+/* ── SOURCE LINK ── */
+.src{
+  display:inline-flex;align-items:center;gap:3px;
+  font-family:var(--fm);font-size:11px;font-weight:700;
+  color:var(--mu);background:rgba(107,114,128,.12);
+  border:1px solid var(--bd2);border-radius:4px;
+  padding:1px 7px;margin-left:7px;vertical-align:middle;
+  text-decoration:none;transition:all .15s;white-space:nowrap;
+}
+.src:hover{color:var(--ac);border-color:var(--ac);background:rgba(240,165,0,.08)}
+.src::before{content:'↗';font-size:10px}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP NAV ═══ -->
+<div class="top-bar"><div class="tbi">
+  <div class="logo">PORT STUDY <sub>선택과 집중</sub></div>
+  <nav class="snav">
+    <div class="stab on" onclick="sw(0)" id="tb0">
+      <div class="tn">01</div><div class="tnm">토모큐브</div><div class="tc">475960</div>
+      <div class="trisk"><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td"></div></div>
+    </div>
+    <div class="stab" onclick="sw(1)" id="tb1">
+      <div class="tn">02</div><div class="tnm">아이티센</div><div class="tc">220100</div>
+      <div class="trisk"><div class="td tdm"></div><div class="td tdm"></div><div class="td tdm"></div><div class="td"></div><div class="td"></div></div>
+    </div>
+    <div class="stab" onclick="sw(2)" id="tb2">
+      <div class="tn">03</div><div class="tnm">큐리옥스</div><div class="tc">445680</div>
+      <div class="trisk"><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div></div>
+    </div>
+    <div class="stab" onclick="sw(3)" id="tb3">
+      <div class="tn">04</div><div class="tnm">큐리오시스</div><div class="tc">494120</div>
+      <div class="trisk"><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td"></div></div>
+    </div>
+    <div class="stab" onclick="sw(4)" id="tb4">
+      <div class="tn">05</div><div class="tnm">세아제강</div><div class="tc">003030</div>
+      <div class="trisk"><div class="td tdm"></div><div class="td tdm"></div><div class="td tdm"></div><div class="td"></div><div class="td"></div></div>
+    </div>
+    <div class="stab" onclick="sw(5)" id="tb5">
+      <div class="tn">06</div><div class="tnm">비츠로셀</div><div class="tc">082920</div>
+      <div class="trisk"><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td"></div></div>
+    </div>
+    <div class="stab" onclick="sw(6)" id="tb6">
+      <div class="tn">07</div><div class="tnm">프로티나</div><div class="tc">468530</div>
+      <div class="trisk"><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div></div>
+    </div>
+    <div class="stab" onclick="sw(7)" id="tb7">
+      <div class="tn">08</div><div class="tnm">로킷헬스케어</div><div class="tc">376900</div>
+      <div class="trisk"><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div><div class="td tdh"></div></div>
+    </div>
+  </nav>
+</div></div>
+
+<div class="panels">
+
+<!-- ████ PANEL 0: 토모큐브 (완전체) ████ -->
+<div class="panel on" id="p0">
+
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row">
+      <span class="badge bb">바이오</span>
+      <span class="badge bm">정밀기기</span>
+      <span class="badge bi2">산업용확장중</span>
+      <span class="pdate">분석일 2026.05.08</span>
+    </div>
+    <div class="pname">토모큐브</div>
+    <div class="pcode">475960 · KOSDAQ · WI26 건강관리 · NXT</div>
+    <div class="pdesc">세계 유일 ODT 홀로그래픽 3D 현미경 · FDA NAMs 동물실험 폐지 직수혜 · 유리기판 HT-T1 신사업 · 2026 흑자전환 궤도</div>
+  </div>
+  <div class="phero-r">
+    <div class="kpi"><div class="kpi-l">현재가</div><div class="kpi-v ka">54,400</div></div>
+    <div class="kpi"><div class="kpi-l">52주 고/저</div><div class="kpi-v">68,300/37,150</div></div>
+    <div class="kpi"><div class="kpi-l">시가총액</div><div class="kpi-v ka">~7,200억</div></div>
+    <div class="kpi"><div class="kpi-l">2025 매출</div><div class="kpi-v kg">113억</div></div>
+    <div class="kpi"><div class="kpi-l">Q4 OPM</div><div class="kpi-v kg">+8.0%</div></div>
+    <div class="kpi"><div class="kpi-l">2026E 매출</div><div class="kpi-v ka">234억</div></div>
+    <div class="kpi"><div class="kpi-l">부채비율</div><div class="kpi-v kg">7%</div></div>
+    <div class="kpi"><div class="kpi-l">현금 보유</div><div class="kpi-v kg">~300억</div></div>
+    <div class="kpi"><div class="kpi-l">4월 수출 YoY</div><div class="kpi-v kg">+74.4%</div></div>
+  </div>
+</div>
+
+<!-- 긴급 알림 -->
+<div class="pcontent" style="padding-top:0;padding-bottom:0">
+  <div class="alert alert-warn">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body"><b>2026 Q1 실적 쇼크:</b> 매출 6.5억(YoY -46%), 영업이익 -30.1억(적자지속) 공시. 그러나 실적 발표 직전 20일간 주가 +70.6% 상승, 4월 수출 YoY +74.4% — 주가는 실적이 아닌 미래를 선반영 중</div>
+  </div>
+  <div class="alert alert-good">
+    <div class="alert-icon">🚀</div>
+    <div class="alert-body"><b>신규 모멘텀:</b> 유리기판 검사장비 HT-T1 복수의 글로벌 기업과 논의 중 / 2026 Q3 초고가 장비 데이터 공개 / Q4 HT-X1 Max 출시 예정 / TAM 7.6조원 시장</div>
+  </div>
+</div>
+
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on" onclick="ss('tc1',this)">개요</div>
+  <div class="sb" onclick="ss('tc2',this)">차트분석</div>
+  <div class="sb" onclick="ss('tcs',this)" style="color:var(--ac)">📊 수급분석</div>
+  <div class="sb" onclick="ss('tc3',this)">실적심층</div>
+  <div class="sb" onclick="ss('tc4',this)">재무구조</div>
+  <div class="sb" onclick="ss('tc5',this)">밸류에이션</div>
+  <div class="sb" onclick="ss('tc6',this)">전망/전략</div>
+  <div class="sb" onclick="ss('tc7',this)">경쟁사</div>
+  <div class="sb" onclick="ss('tc8',this)">호재/악재</div>
+  <div class="sb" onclick="ss('tc9',this)">리스크</div>
+  <div class="sb" onclick="ss('tc10',this)">타임라인</div>
+</div></div>
+
+<div class="pcontent">
+
+<!-- ①개요 -->
+<div class="sec" id="tc1">
+  <div class="sec-hd"><span class="sn">01</span><span class="st">종목 개요</span><div class="sl"></div></div>
+  <div class="stat-row">
+    <div class="stat-box"><div class="stat-num" style="color:var(--ac)">7.6조</div><div class="stat-lbl">추산 TAM (전세계)</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--gn)">+91%</div><div class="stat-lbl">2025 매출 YoY</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--gn)">7%</div><div class="stat-lbl">부채비율</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--bl)">200+</div><div class="stat-lbl">공급 기관 (50개국)</div></div>
+  </div>
+  <div class="two">
+    <div class="ic"><div class="ic-t">기본 정보</div>
+      <div class="kv"><span class="kk">종목코드</span><span class="kv2">475960 · KOSDAQ</span></div>
+      <div class="kv"><span class="kk">섹터</span><span class="kv2">WI26 건강관리 · NXT</span></div>
+      <div class="kv"><span class="kk">시가총액</span><span class="kv2 va">약 7,200억원</span></div>
+      <div class="kv"><span class="kk">현재가 (5/8)</span><span class="kv2">54,400원 (-4.23%)</span></div>
+      <div class="kv"><span class="kk">52주 고/저</span><span class="kv2">68,300 / 37,150</span></div>
+      <div class="kv"><span class="kk">외국인 보유율</span><span class="kv2 va">약 3%대</span></div>
+      <div class="kv"><span class="kk">Fwd PER (12M)</span><span class="kv2">100.82배</span></div>
+      <div class="kv"><span class="kk">업종 PER</span><span class="kv2">192.62배</span></div>
+      <div class="kv"><span class="kk">PBR (2025)</span><span class="kv2 va">17.51배</span></div>
+      <div class="kv"><span class="kk">감사의견</span><span class="kv2 vg">Outstanding</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">비즈니스 모델 (3-Axis)</div>
+      <div class="kv"><span class="kk">사업축 1</span><span class="kv2 vg">바이오 연구용 장비</span></div>
+      <div class="kv"><span class="kk">주력 제품</span><span class="kv2">HT-X1 / HT-X1 mini / HT-X1 Max(예정)</span></div>
+      <div class="kv"><span class="kk">사업축 2</span><span class="kv2 va">산업용 모듈</span></div>
+      <div class="kv"><span class="kk">신사업</span><span class="kv2">HT-T1 유리기판 검사장비</span></div>
+      <div class="kv"><span class="kk">사업축 3</span><span class="kv2 vg">AI SW 구독 매출</span></div>
+      <div class="kv"><span class="kk">핵심 기술</span><span class="kv2">ODT(광학회절단층촬영)</span></div>
+      <div class="kv"><span class="kk">고객 수</span><span class="kv2 vg">50개국 200+ 기관</span></div>
+      <div class="kv"><span class="kk">주요 고객</span><span class="kv2">MIT·하버드·삼성바이오 등</span></div>
+      <div class="kv"><span class="kk">사외이사</span><span class="kv2 va">파크시스템스 박상일 대표</span></div>
+      <div class="kv"><span class="kk">핵심 수혜</span><span class="kv2 vg">FDA NAMs 동물실험 폐지</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ②차트분석 -->
+<div class="sec" id="tc2">
+  <div class="sec-hd"><span class="sn">02</span><span class="st">주가 차트 분석</span><div class="sl"></div></div>
+  <div class="nb"><p>📷 <b>images/tomocube_6m.png</b>(단기) · <b>images/tomocube_2y.png</b>(장기) 업로드 시 자동 표시</p></div>
+
+  <div class="cw">
+    <div class="ch">
+      <span class="chl">📊 일봉 6개월 차트</span>
+      <span class="chr">2026.05.08 기준</span>
+    </div>
+    <div class="cb">
+      <img src="images/tomocube_6m.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/tomocube_6m.png<br>6개월 일봉 차트 업로드 필요</div></div>
+    </div>
+    <div class="cap">
+      <b>단기 해석:</b> 52주 최고 68,300원(02/25) → 현재 54,400원 (-20.3%). 최저 37,150원(11/11). 2월 급등 이후 조정 구간.
+      심리도 25선 이하 → 역사적 매수 구간 진입 중. 거래량 감소 → 에너지 소진 후 재충전 구간.
+    </div>
+  </div>
+
+  <div class="cw">
+    <div class="ch">
+      <span class="chl">📊 주봉 2년 차트</span>
+      <span class="chr">2026.05.08 기준</span>
+    </div>
+    <div class="cb">
+      <img src="images/tomocube_2y.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/tomocube_2y.png<br>2년 주봉 차트 업로드 필요</div></div>
+    </div>
+    <div class="cap">
+      <b>장기 해석:</b> 2024.11 저점 9,990원 → 2026.02 고점 68,300원 = +584% 대세 상승. 현재 120일 이평선 위 유지 → 장기 상승 추세 훼손 없음.
+      2025년 초 박스권 돌파 후 상승 패턴과 유사한 수렴 조정 중 → 다음 상승의 에너지 충전 구간 가능성.
+    </div>
+  </div>
+
+  <div class="two">
+    <div class="ic"><div class="ic-t">차트 기술적 분석</div>
+      <div class="kv"><span class="kk">현재 위치</span><span class="kv2 va">고점比 -20% 눌림목</span></div>
+      <div class="kv"><span class="kk">이평선 상태</span><span class="kv2 vg">120일선 위 유지</span></div>
+      <div class="kv"><span class="kk">심리도 (10)</span><span class="kv2 va">25선 이하 (과매도)</span></div>
+      <div class="kv"><span class="kk">거래량</span><span class="kv2">감소 → 에너지 축적</span></div>
+      <div class="kv"><span class="kk">지지선</span><span class="kv2">52,000~53,000원</span></div>
+      <div class="kv"><span class="kk">저항선</span><span class="kv2">60,000원 / 68,300원</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">수급 구조 (3개월 실측)</div>
+      <div class="kv"><span class="kk">개인 누적</span><span class="kv2 vg">+63,295주 (저가 흡수)</span></div>
+      <div class="kv"><span class="kk">기관 누적</span><span class="kv2 vr">-7,941주 (중립 전환 중)</span></div>
+      <div class="kv"><span class="kk">외국인 누적</span><span class="kv2 vr">-55,158주 (소진율↓)</span></div>
+      <div class="kv"><span class="kk">외국인 소진율</span><span class="kv2">5.74% → 3.31% (감소)</span></div>
+      <div class="kv"><span class="kk">수급 국면</span><span class="kv2 va">외인 매도 소화 + 개인 흡수</span></div>
+      <div class="kv"><span class="kk">반전 조건</span><span class="kv2 va">기관 재매수 전환 시 확인</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ★수급분석 -->
+<div class="sec" id="tcs">
+  <div class="sec-hd"><span class="sn" style="color:var(--ac)">S</span><span class="st">수급 심층 분석</span><div class="sl"></div></div>
+
+  <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-bottom:14px">
+    📅 분석 기간: 2026.02.09 ~ 2026.05.08 (3개월) · 데이터 출처: HTS 종목별 기관매매추이
+  </div>
+
+  <!-- 3개월 누적 수급 요약 KPI -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">
+    <div class="kpi" style="border-color:rgba(231,76,60,.3)">
+      <div class="kpi-l">개인 누적 (3M)</div>
+      <div class="kpi-v" style="color:var(--rd);font-size:15px">+63,295주</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:3px">평균단가 57,784원</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(59,130,246,.3)">
+      <div class="kpi-l">기관 누적 (3M)</div>
+      <div class="kpi-v" style="color:var(--bl);font-size:15px">-7,941주</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:3px">평균단가 59,791원</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(46,204,113,.3)">
+      <div class="kpi-l">외국인 누적 (3M)</div>
+      <div class="kpi-v" style="color:var(--gn);font-size:15px">-55,158주</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:3px">평균단가 58,661원</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(168,85,247,.3)">
+      <div class="kpi-l">외국인 소진율</div>
+      <div class="kpi-v" style="color:var(--pu);font-size:15px">3.31%</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:3px">('26.05.08 기준)</div>
+    </div>
+  </div>
+
+  <!-- 수급 종합 해석 알림박스 -->
+  <div class="alert alert-warn" style="margin-bottom:14px">
+    <div class="alert-icon">🔍</div>
+    <div class="alert-body">
+      <b>[3개월 수급 핵심 해석]</b> 외국인이 3개월간 5.5만주 이상 순매도하며 소진율을 5.74%(2/09) → 3.31%(5/08)로 끌어내렸다.
+      기관은 2월 대규모 매도(-33만주 누적) 이후 4~5월 들어 순매수·중립으로 전환 중.
+      <b>개인이 전 구간 저가 흡수 → 전형적 "외인 던지기·개인 받기" 패턴.</b>
+      단, 외국인 소진율이 3%대로 낮아져 추가 대규모 매도 여력이 줄었다는 점은 긍정적 신호.
+    </div>
+  </div>
+
+  <div class="two" style="margin-bottom:14px">
+
+    <!-- 구간별 수급 흐름표 -->
+    <div class="ic" style="padding:0">
+      <div class="ic-t" style="padding:10px 14px;border-bottom:1px solid var(--bd)">📋 구간별 수급 흐름 (누적 기준)</div>
+      <div style="padding:0">
+        <table style="width:100%;border-collapse:collapse;font-family:var(--fm);font-size:11px">
+          <thead>
+            <tr style="background:rgba(255,255,255,.03)">
+              <th style="padding:7px 10px;text-align:left;color:var(--mu);font-weight:500;border-bottom:1px solid var(--bd)">구간</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--rd);border-bottom:1px solid var(--bd)">개인</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--bl);border-bottom:1px solid var(--bd)">기관</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--gn);border-bottom:1px solid var(--bd)">외국인</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--mu);border-bottom:1px solid var(--bd)">소진율</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:rgba(231,76,60,.04)">
+              <td style="padding:6px 10px;color:var(--tx)">2/09~2/28<br><span style="color:var(--mu);font-size:9px">고점 급락 직후</span></td>
+              <td style="padding:6px;text-align:right;color:#F08080">-269,698</td>
+              <td style="padding:6px;text-align:right;color:#7EC8E3">+11,992</td>
+              <td style="padding:6px;text-align:right;color:#90EE90">+269,054</td>
+              <td style="padding:6px;text-align:right;color:var(--mu)">3.9%→5.7%</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 10px;color:var(--tx)">3/01~3/31<br><span style="color:var(--mu);font-size:9px">저점 탐색·외인 순매도</span></td>
+              <td style="padding:6px;text-align:right;color:#F08080">-46,127 <span style="color:var(--mu);font-size:9px">(누적)</span></td>
+              <td style="padding:6px;text-align:right;color:#F08080">-5,200</td>
+              <td style="padding:6px;text-align:right;color:#90EE90">+5,719</td>
+              <td style="padding:6px;text-align:right;color:var(--mu)">5.7%→4.6%</td>
+            </tr>
+            <tr style="background:rgba(46,204,113,.04)">
+              <td style="padding:6px 10px;color:var(--tx)">4/01~4/30<br><span style="color:var(--mu);font-size:9px">바닥 다지기</span></td>
+              <td style="padding:6px;text-align:right;color:#90EE90">+257,210</td>
+              <td style="padding:6px;text-align:right;color:#F08080">-30,166</td>
+              <td style="padding:6px;text-align:right;color:#F08080">-120,212</td>
+              <td style="padding:6px;text-align:right;color:var(--mu)">4.6%→3.7%</td>
+            </tr>
+            <tr style="background:rgba(240,165,0,.04)">
+              <td style="padding:6px 10px;color:var(--ac)"><b>5/04~5/08</b><br><span style="color:var(--mu);font-size:9px">최근 5거래일</span></td>
+              <td style="padding:6px;text-align:right;color:#90EE90"><b>+122,139</b></td>
+              <td style="padding:6px;text-align:right;color:#F08080"><b>-16,921</b></td>
+              <td style="padding:6px;text-align:right;color:#F08080"><b>-28,083</b></td>
+              <td style="padding:6px;text-align:right;color:var(--ac)">→3.31%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 투자주체별 행동 해석 -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="ic">
+        <div class="ic-t">🏦 기관 행동 분석</div>
+        <div class="kv"><span class="kk">2월 포지션</span><span class="kv2 vr">대규모 순매도(-33만주 누적)</span></div>
+        <div class="kv"><span class="kk">3~4월 전환</span><span class="kv2 va">매도 축소 · 중립 전환</span></div>
+        <div class="kv"><span class="kk">5월 초</span><span class="kv2 vr">단기 -15,381주 (5/8 하루)</span></div>
+        <div class="kv"><span class="kk">평균 매도단가</span><span class="kv2">59,791원 (현재가 上)</span></div>
+        <div class="kv"><span class="kk">해석</span><span class="kv2 va">Q1 실적 쇼크 선반영 후 관망세로 전환. 흑자전환 확인 전 재매수 자제</span></div>
+      </div>
+      <div class="ic">
+        <div class="ic-t">🌍 외국인 행동 분석</div>
+        <div class="kv"><span class="kk">2월 (고점 직후)</span><span class="kv2 vg">+26.9만주 순매수</span></div>
+        <div class="kv"><span class="kk">3월 이후</span><span class="kv2 vr">일관된 순매도 전환</span></div>
+        <div class="kv"><span class="kk">소진율 변화</span><span class="kv2">5.74% → 3.31% (지속 감소)</span></div>
+        <div class="kv"><span class="kk">평균 매도단가</span><span class="kv2">58,661원</span></div>
+        <div class="kv"><span class="kk">해석</span><span class="kv2 va">고점 매수 물량 정리 중. 소진율 3%대 → 추가 대규모 매도 여력 제한적</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 주요 변곡점 수급 이벤트 -->
+  <div class="ic" style="margin-bottom:14px">
+    <div class="ic-t">⚡ 주목할 수급 변곡점 이벤트</div>
+    <table style="width:100%;border-collapse:collapse;font-family:var(--fm);font-size:11px">
+      <thead>
+        <tr style="background:rgba(255,255,255,.03)">
+          <th style="padding:7px 10px;text-align:left;color:var(--mu);font-weight:500;border-bottom:1px solid var(--bd)">날짜</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--mu);border-bottom:1px solid var(--bd)">종가</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--mu);border-bottom:1px solid var(--bd)">등락률</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--rd);border-bottom:1px solid var(--bd)">개인</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--bl);border-bottom:1px solid var(--bd)">기관</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--gn);border-bottom:1px solid var(--bd)">외국인</th>
+          <th style="padding:7px 10px;text-align:left;color:var(--mu);border-bottom:1px solid var(--bd)">해석</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:rgba(231,76,60,.06)">
+          <td style="padding:6px 10px;color:var(--rd);font-weight:700">2/23 🔴</td>
+          <td style="padding:6px 8px;text-align:right">66,000</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+15.18%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-121,658</td>
+          <td style="padding:6px 8px;text-align:right;color:#7EC8E3">+6,092</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+130,577</td>
+          <td style="padding:6px 10px;color:var(--ac)">외국인 폭발 매수. 최대 거래량 886K. 단기 천장 신호</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 10px;color:var(--tx)">3/04</td>
+          <td style="padding:6px 8px;text-align:right">57,400</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--rd)">-10.31%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-34,338</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-31,486</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+57,668</td>
+          <td style="padding:6px 10px;color:var(--mu)">기관·개인 동반 이탈. 외국인만 역매수. 급락 방어</td>
+        </tr>
+        <tr style="background:rgba(59,130,246,.04)">
+          <td style="padding:6px 10px;color:var(--bl)">3/23</td>
+          <td style="padding:6px 8px;text-align:right">54,100</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--rd)">-8.77%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-16,836</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+3,749</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+10,035</td>
+          <td style="padding:6px 10px;color:var(--mu)">-8.77% 급락인데 기관+외국인 동반 순매수 = 수급 바닥 신호</td>
+        </tr>
+        <tr style="background:rgba(46,204,113,.04)">
+          <td style="padding:6px 10px;color:var(--gn)">4/01 🟢</td>
+          <td style="padding:6px 8px;text-align:right">58,200</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+8.58%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-32,545</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-2,833</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+35,668</td>
+          <td style="padding:6px 10px;color:var(--mu)">외국인 +35K 매수로 +8.58% 급등. 4월 반등 시작점</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 10px;color:var(--tx)">4/15</td>
+          <td style="padding:6px 8px;text-align:right">58,800</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+6.33%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-76,539</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+25,029</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+51,893</td>
+          <td style="padding:6px 10px;color:var(--mu)">개인 대규모 차익실현. 기관·외국인 동반 매수 = 4월 최강 수급일</td>
+        </tr>
+        <tr style="background:rgba(231,76,60,.06)">
+          <td style="padding:6px 10px;color:var(--ac)">5/06 ⚠️</td>
+          <td style="padding:6px 8px;text-align:right">63,700</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+8.70%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-122,750</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+26,098</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+94,956</td>
+          <td style="padding:6px 10px;color:var(--ac)">3일간 63,700원 급등. 외국인 +95K. 단기 과열 → 5/08 조정(-4.23%) 이어짐</td>
+        </tr>
+        <tr style="background:rgba(231,76,60,.04)">
+          <td style="padding:6px 10px;color:var(--rd)">5/08 📍</td>
+          <td style="padding:6px 8px;text-align:right">54,400</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--rd)">-4.23%</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+125,744</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-15,381</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-107,039</td>
+          <td style="padding:6px 10px;color:var(--rd)"><b>현재 기준일.</b> 외국인 -107K 대규모 매도. 개인 +125K 흡수</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 수급 패턴 종합 판단 -->
+  <div class="two">
+    <div class="sbox" style="margin-bottom:0">
+      <div class="sbox-t">🎯 수급 패턴 종합 판단</div>
+      <p>
+        <b>① 외국인 소진율 감소 = 매도 압력 완화 신호</b><br>
+        3개월간 소진율 5.74% → 3.31%로 2.4%p 감소. 외국인 보유 물량이 줄어든 만큼 추가 대규모 던지기 리스크도 축소. 단, 아직 소진 중이므로 완전한 전환으로 보기는 이르다.<br><br>
+        <b>② 기관의 고점 매도 → 관망 전환 구조</b><br>
+        2월 고점(66,000~68,300원) 구간에서 기관이 대규모 매도(-30만주 이상)한 후, 4~5월 현재는 소규모 매도 혹은 중립 패턴. 기관이 재매수로 전환하는 시점(흑자전환 확인 후)이 다음 상승 트리거가 될 가능성 높음.<br><br>
+        <b>③ 개인의 저가 흡수 = 단기 수급 안전판이자 과공급 리스크</b><br>
+        개인이 전 구간에 걸쳐 저가 흡수 역할을 해왔으나, 이는 양날의 검. 개인 비중 확대 → 수급 구조가 취약해질 수 있음. 기관/외국인 재진입이 수반되어야 지속적 상승 가능.
+      </p>
+    </div>
+    <div class="ic">
+      <div class="ic-t">📊 수급 기반 매매 시그널</div>
+      <div class="kv"><span class="kk">현재 수급 국면</span><span class="kv2 va">외국인 매도 소화 중</span></div>
+      <div class="kv"><span class="kk">기관 포지션</span><span class="kv2 va">관망 (재매수 미확인)</span></div>
+      <div class="kv"><span class="kk">외국인 소진율</span><span class="kv2 vg">3.31% ↓ (감소 추세)</span></div>
+      <div class="kv"><span class="kk">개인 수급</span><span class="kv2 vr">고점比 역매수 지속</span></div>
+      <div class="kv"><span class="kk">수급 반전 조건</span><span class="kv2 va">기관 순매수 전환 확인</span></div>
+      <div class="kv"><span class="kk">단기 경계 구간</span><span class="kv2 vr">63,000원대 외국인 매도 재출현</span></div>
+      <div class="kv"><span class="kk">매집 구간 판단</span><span class="kv2 vg">52,000~55,000원 개인 대량 흡수</span></div>
+      <div class="kv"><span class="kk">종합 신호</span><span class="kv2 va">⚡ 중립 — 기관 재진입 대기</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ③실적심층 -->
+<div class="sec" id="tc3">
+  <div class="sec-hd"><span class="sn">03</span><span class="st">실적 심층 분석</span><div class="sl"></div></div>
+
+  <div class="alert alert-warn" style="margin-bottom:14px">
+    <div class="alert-icon">📉</div>
+    <div class="alert-body"><b>2026 Q1 충격:</b> 매출 6.5억(YoY -46%) · 영업이익 -30.1억. 단, 이는 구조적 계절성. Q1은 매년 최저 시즌 — 2025년도 Q1(12억)→Q2(31억)→Q3(25억)→Q4(50억) 패턴 반복</div>
+  </div>
+
+  <div class="ic" style="margin-bottom:12px"><div class="ic-t">연간 실적 추이 (단위: 억원)</div>
+    <div style="padding:8px 0">
+      <div class="bar-row"><span class="bar-yr">2023A</span><div class="bar-wrap"><div class="bar-fill" style="width:16%"></div></div><span class="bar-val" style="color:var(--tx)">37</span></div>
+      <div class="bar-row"><span class="bar-yr">2024A</span><div class="bar-wrap"><div class="bar-fill" style="width:25%"></div></div><span class="bar-val" style="color:var(--tx)">59</span></div>
+      <div class="bar-row"><span class="bar-yr">2025A</span><div class="bar-wrap"><div class="bar-fill" style="width:48%"></div></div><span class="bar-val" style="color:var(--tx)">113</span></div>
+      <div class="bar-row"><span class="bar-yr">2026E</span><div class="bar-wrap"><div class="bar-fill est" style="width:100%"></div></div><span class="bar-val" style="color:var(--ac)">234E</span></div>
+    </div>
+  </div>
+
+  <div class="tw" style="margin-bottom:12px"><table>
+    <thead>
+      <tr>
+        <th style="text-align:left">항목</th>
+        <th>2023A</th><th>2024A</th><th>2025A</th>
+        <th>2026Q1A</th><th>2026E</th><th>2027E</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="bold"><td>매출액 (억원)</td><td>37</td><td>59</td><td>113</td><td class="neg">6.5</td><td class="amb">234</td><td class="pos">~400</td></tr>
+      <tr class="hl2"><td>영업이익 (억원)</td><td class="neg">-67</td><td class="neg">-88</td><td class="neg">-56</td><td class="neg">-30.1</td><td class="pos">+18</td><td class="pos">+100+</td></tr>
+      <tr><td>당기순이익 (억원)</td><td class="neg">-236</td><td class="neg">-83</td><td class="neg">-48</td><td>—</td><td class="pos">+20</td><td>—</td></tr>
+      <tr><td>매출총이익률 (%)</td><td>59.5</td><td>61.0</td><td class="pos">65.8</td><td>—</td><td class="pos">67+</td><td>—</td></tr>
+      <tr><td>OPM (%)</td><td class="neg">-181</td><td class="neg">-149</td><td class="neg">-49.6</td><td class="neg">-463</td><td class="pos">+7.7</td><td class="pos">+25</td></tr>
+      <tr class="est"><td>EPS (원)</td><td class="neg">-3,137</td><td class="neg">-753</td><td class="neg">-365</td><td>—</td><td class="pos">+152</td><td>—</td></tr>
+      <tr><td>FCF (억원)</td><td class="neg">-62</td><td class="neg">-72</td><td class="neg">-75</td><td>—</td><td class="neg">-30~40</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tw"><table>
+    <thead>
+      <tr><th style="text-align:left">분기</th><th>25Q1</th><th>25Q2</th><th>25Q3</th><th>25Q4</th><th>26Q1A</th><th>26Q2E</th><th>26Q3E</th></tr>
+    </thead>
+    <tbody>
+      <tr class="bold"><td>매출액 (억원)</td><td>12</td><td>31</td><td>25</td><td class="pos">50</td><td class="neg">6.5</td><td class="amb">39</td><td class="amb">46</td></tr>
+      <tr><td>영업이익 (억원)</td><td class="neg">-11</td><td class="neg">-11</td><td class="neg">-18</td><td class="pos">+4</td><td class="neg">-30.1</td><td class="neg">-9E</td><td class="neg">-5E</td></tr>
+      <tr><td>OPM (%)</td><td class="neg">-92</td><td class="neg">-35</td><td class="neg">-72</td><td class="pos">+8.0</td><td class="neg">-463</td><td class="neg">-23E</td><td class="neg">-11E</td></tr>
+      <tr class="hl"><td>YoY 매출성장</td><td>-46%</td><td>+83%</td><td>+20%</td><td class="pos">+449%</td><td class="neg">-46%</td><td class="pos">+26%E</td><td class="pos">+84%E</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="sbox" style="margin-top:12px">
+    <div class="sbox-t">실적 핵심 해석</div>
+    <p>
+      2025 Q4가 50억·OPM +8%로 분기 첫 흑자전환에 성공했으나, 2026 Q1에서 다시 6.5억으로 급락. 이는 예외적 쇼크가 아니라 <b>구조적 계절성</b>의 재확인이다.
+      HT-X1 mini 국내 수요(12월 집중) + 산업용 모듈 2건 인식이 Q4를 만들었고, Q1은 계약 공백기다.
+      핵심은 <b>연간 누적 매출이 Q4에 집중되는 back-loaded 구조</b>라는 점. 2026년 컨센서스 234억을 달성하려면 Q2~Q4에 227.5억이 필요하다 — 하반기에 승부가 결정된다.
+      매출총이익률이 2023년 59.5% → 2025년 65.8%로 꾸준히 개선 중 = <b>제품 믹스 고도화 및 원가 효율화 진행 중</b>.
+    </p>
+  </div>
+</div>
+
+<!-- ④재무구조 -->
+<div class="sec" id="tc4">
+  <div class="sec-hd"><span class="sn">04</span><span class="st">재무 구조 분석</span><div class="sl"></div></div>
+
+  <div class="tw" style="margin-bottom:12px"><table>
+    <thead><tr><th style="text-align:left">재무상태 (억원)</th><th>25Q1</th><th>25Q2</th><th>25Q3</th><th>25Q4</th></tr></thead>
+    <tbody>
+      <tr class="bold"><td>자산총계</td><td>421</td><td>416</td><td>410</td><td>415</td></tr>
+      <tr><td>유동자산</td><td class="pos">364</td><td class="pos">355</td><td class="pos">348</td><td class="pos">357</td></tr>
+      <tr><td>비유동자산</td><td>57</td><td>60</td><td>62</td><td>58</td></tr>
+      <tr class="bold hl2"><td>부채총계</td><td class="pos">27</td><td class="pos">30</td><td class="pos">34</td><td class="pos">27</td></tr>
+      <tr><td>유동부채</td><td class="pos">14</td><td class="pos">18</td><td class="pos">23</td><td class="pos">15</td></tr>
+      <tr><td>비유동부채</td><td>13</td><td>12</td><td>12</td><td>12</td></tr>
+      <tr class="bold hl"><td>자본총계</td><td class="pos">394</td><td class="pos">386</td><td class="pos">376</td><td class="pos">388</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="three">
+    <div class="ic"><div class="ic-t">안정성 지표 (2025A)</div>
+      <div class="kv"><span class="kk">유동비율</span><span class="kv2 vg">2,315%</span></div>
+      <div class="kv"><span class="kk">당좌비율</span><span class="kv2 vg">2,082%</span></div>
+      <div class="kv"><span class="kk">부채비율</span><span class="kv2 vg">7.00%</span></div>
+      <div class="kv"><span class="kk">순부채비율</span><span class="kv2 vg">N/A (순현금)</span></div>
+      <div class="kv"><span class="kk">이자보상배율</span><span class="kv2 vg">N/A (무이자부채)</span></div>
+      <div class="kv"><span class="kk">자기자본비율</span><span class="kv2 vg">93.5%</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">수익성 지표 (2025A)</div>
+      <div class="kv"><span class="kk">매출총이익률</span><span class="kv2 vg">65.83%</span></div>
+      <div class="kv"><span class="kk">영업이익률</span><span class="kv2 vr">-49.25%</span></div>
+      <div class="kv"><span class="kk">순이익률</span><span class="kv2 vr">-42.54%</span></div>
+      <div class="kv"><span class="kk">ROA</span><span class="kv2 vr">-11.30%</span></div>
+      <div class="kv"><span class="kk">ROE</span><span class="kv2 vr">-11.91%</span></div>
+      <div class="kv"><span class="kk">ROIC</span><span class="kv2 vr">-62.25%</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">현금흐름 (연간, 억원)</div>
+      <div class="kv"><span class="kk">영업CF (2023)</span><span class="kv2 vr">-59</span></div>
+      <div class="kv"><span class="kk">영업CF (2024)</span><span class="kv2 vr">-65</span></div>
+      <div class="kv"><span class="kk">영업CF (2025)</span><span class="kv2 vr">-68</span></div>
+      <div class="kv"><span class="kk">CAPEX (2025)</span><span class="kv2">8</span></div>
+      <div class="kv"><span class="kk">FCF (2025)</span><span class="kv2 vr">-75</span></div>
+      <div class="kv"><span class="kk">현금 잔고</span><span class="kv2 vg">~300억 보유</span></div>
+    </div>
+  </div>
+
+  <div class="gbox">
+    <div class="gbox-t">재무 구조 핵심 판단</div>
+    <p>
+      <b>장점:</b> 부채비율 7%, 유동비율 2,315%, 순현금 보유 — 국내 바이오 소형주 중 최상급 재무 건전성.
+      현금 약 300억 보유로 <b>향후 4~5년 운전자금 자체 조달 가능</b>. 추가 자금조달 (유상증자) 압박 없음.
+      <br><b>단점:</b> FCF 적자 -75억(2025) 지속. 하지만 절대 규모가 작고, 2026 흑자전환 시 자체 영업현금흐름 전환 예상.
+      자본금 꾸준한 증가(스톡옵션 행사) — 소폭 희석 요인이나 핵심 임직원 이탈 방지 기능.
+    </p>
+  </div>
+</div>
+
+<!-- ⑤밸류에이션 -->
+<div class="sec" id="tc5">
+  <div class="sec-hd"><span class="sn">05</span><span class="st">밸류에이션 시뮬레이터</span><div class="sl"></div></div>
+
+  <div class="tw" style="margin-bottom:14px"><table>
+    <thead><tr><th style="text-align:left">멀티플</th><th>2023</th><th>2024</th><th>2025A</th><th>Fwd12M</th><th>업종PER</th></tr></thead>
+    <tbody>
+      <tr><td>PER</td><td class="neg">N/A</td><td class="neg">N/A</td><td class="neg">N/A(적자)</td><td class="amb">100.82</td><td class="amb">192.62</td></tr>
+      <tr><td>PBR</td><td>0.00</td><td>4.77</td><td class="amb">17.51</td><td>—</td><td>18.51</td></tr>
+      <tr><td>PSR</td><td>—</td><td>28.48</td><td class="amb">59.49</td><td>—</td><td>—</td></tr>
+      <tr><td>EV/Sales</td><td>—</td><td>27.73</td><td class="amb">57.65</td><td>—</td><td>—</td></tr>
+      <tr class="hl"><td>EPS (원)</td><td class="neg">-3,137</td><td class="neg">-753</td><td class="neg">-365</td><td class="pos">+152E</td><td>—</td></tr>
+      <tr><td>BPS (원)</td><td>1,695</td><td>3,218</td><td>2,912</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="vg2">
+    <div class="vc">
+      <div class="vt">PER 기반 목표주가</div>
+      <div class="slg">
+        <div class="sll"><span>2026E EPS (원)</span><b id="tc-ev">152</b></div>
+        <input type="range" id="tc-e" min="50" max="1000" step="10" value="152" oninput="document.getElementById('tc-ev').textContent=parseInt(this.value).toLocaleString();tcC()">
+      </div>
+      <div class="slg">
+        <div class="sll"><span>적용 PER (배)</span><b id="tc-pv">364</b></div>
+        <input type="range" id="tc-p" min="50" max="600" step="10" value="364" oninput="document.getElementById('tc-pv').textContent=this.value;tcC()">
+      </div>
+      <div class="vres">
+        <div class="vrl">목표주가 (PER)</div>
+        <div class="vrn" id="tc-r" style="color:var(--gn)">55,000원</div>
+        <div class="vrsub" id="tc-rp">현재가 대비 +1%</div>
+      </div>
+      <div style="margin-top:6px;font-family:var(--fm);font-size:9px;color:var(--mu)">키움 목표가: 80,000원 (EPS 152×PER 364배 기준)</div>
+    </div>
+    <div class="vc">
+      <div class="vt">PSR 기반 목표주가</div>
+      <div class="slg">
+        <div class="sll"><span>2026E 매출 (억원)</span><b id="tc-rv">234</b></div>
+        <input type="range" id="tc-re" min="100" max="600" step="10" value="234" oninput="document.getElementById('tc-rv').textContent=this.value;tcPSR()">
+      </div>
+      <div class="slg">
+        <div class="sll"><span>적용 PSR (배)</span><b id="tc-psrv">30</b></div>
+        <input type="range" id="tc-psr" min="5" max="100" step="5" value="30" oninput="document.getElementById('tc-psrv').textContent=this.value;tcPSR()">
+      </div>
+      <div class="vres">
+        <div class="vrl">목표주가 (PSR)</div>
+        <div class="vrn" id="tc-pr" style="color:var(--gn)">—</div>
+        <div class="vrsub" id="tc-prp">계산 중...</div>
+      </div>
+      <div style="margin-top:6px;font-family:var(--fm);font-size:9px;color:var(--mu)">발행주식수: 13,323,195주 기준 · 참고용</div>
+    </div>
+  </div>
+
+  <div class="sbox">
+    <div class="sbox-t">밸류에이션 핵심 판단</div>
+    <p>
+      현 PBR 17.5배는 파크시스템스가 반도체 호황기에 받았던 35배의 절반. 사외이사 박상일 대표가 두 회사를 연결하는 내러티브 고리.
+      PSR 59배는 글로벌 기준으로도 고평가이나, <b>매출 성장률 90%+가 지속되는 한 정당화 가능</b>.
+      2026 흑자전환 시 PER 유효 구간 진입 → 기관 참여 확대 예상. 현재는 그 전환점을 앞둔 고점 대비 -20% 조정 구간.
+      TAM 7.6조원 대비 현 시총 7,200억원 = <b>TAM의 9.5% — 초기 침투 단계</b>.
+    </p>
+  </div>
+</div>
+
+<!-- ⑥전망/전략 -->
+<div class="sec" id="tc6">
+  <div class="sec-hd"><span class="sn">06</span><span class="st">주가 전망 및 매수 전략</span><div class="sl"></div></div>
+  <div class="og">
+    <div class="oc wn">
+      <div class="op">단기 · 1~3개월</div>
+      <div class="opr">48,000~58,000원</div>
+      <div class="od">↔ Q1 쇼크 소화 구간 · 조정 완료 확인 필요</div>
+    </div>
+    <div class="oc">
+      <div class="op">중기 · Q2~Q4 2026</div>
+      <div class="opr">60,000~80,000원</div>
+      <div class="od">↑ 하반기 실적 회복 · HT-X1 Max 출시</div>
+    </div>
+    <div class="oc gd">
+      <div class="op">연간 · 2027</div>
+      <div class="opr">80,000~120,000원</div>
+      <div class="od">↑↑ 연간 흑자 안착 · HT-T1 사업화</div>
+    </div>
+    <div class="oc nu">
+      <div class="op">장기 · 2028~</div>
+      <div class="opr">120,000~200,000+원</div>
+      <div class="od">🚀 반도체 유리기판 모듈 대량 공급 시나리오</div>
+    </div>
+  </div>
+  <div class="sbox">
+    <div class="sbox-t">매수 전략 (2026.05.08 기준)</div>
+    <p>
+      <b>1차 매수:</b> 52,000~54,000원 (현재 구간) — 심리도 25선 이하, 역사적 매수 기회권. 소량 분할 진입.<br>
+      <b>2차 매수:</b> 48,000~50,000원 이탈 시 추가 — 60일선 근접 지지 확인 후.<br>
+      <b>손절 기준:</b> 44,000원(120일선) 이탈 시 포지션 재검토.<br>
+      <b>비중 확대 트리거:</b> ① Q2 실적 회복 공시 ② HT-T1 고객사 계약 체결 ③ Q3 초고가 장비 데이터 공개.<br>
+      <b>주의사항:</b> VC 물량 12% 오버행 잔존 — 주가 급등 시 물량 출회 가능. 포지션 사이즈 관리 필수.
+    </p>
+  </div>
+</div>
+
+<!-- ⑦경쟁사 -->
+<div class="sec" id="tc7">
+  <div class="sec-hd"><span class="sn">07</span><span class="st">경쟁사 비교</span><div class="sl"></div></div>
+  <div class="tw"><table>
+    <thead>
+      <tr>
+        <th style="text-align:left">기업</th>
+        <th style="text-align:left">국가/상장</th>
+        <th>기술 방식</th>
+        <th>매출 규모</th>
+        <th>시총/규모</th>
+        <th>경쟁 관계</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="ch-row bold">
+        <td>토모큐브 <span class="ctag ctag-o">우리</span></td>
+        <td>한국/KOSDAQ</td><td>ODT 3D 홀로그래피</td><td>113억(2025A)</td><td>~7,200억</td><td>독점적 포지션</td>
+      </tr>
+      <tr>
+        <td>Zeiss <span class="ctag ctag-l">글로벌1위</span></td>
+        <td>독일/비상장</td><td>공초점 형광 현미경</td><td>수조원</td><td>비상장</td><td>간접경쟁(다른시장)</td>
+      </tr>
+      <tr>
+        <td>Leica</td>
+        <td>독일/Danaher</td><td>형광 현미경</td><td>대형</td><td>—</td><td>간접경쟁</td>
+      </tr>
+      <tr>
+        <td>Nanolive <span class="ctag ctag-r">근접경쟁</span></td>
+        <td>스위스/비상장</td><td>ODT 유사 기술</td><td>소형</td><td>비상장</td><td>직접경쟁(일부)</td>
+      </tr>
+      <tr>
+        <td>BioVision Tech</td>
+        <td>미국/비상장</td><td>QPI 기반</td><td>소형</td><td>—</td><td>일부 경쟁</td>
+      </tr>
+      <tr>
+        <td>파크시스템스 <span class="ctag ctag-l">참고</span></td>
+        <td>한국/KOSDAQ</td><td>AFM 나노계측</td><td>~600억</td><td>~8,000억</td><td>밸류에이션 벤치마크</td>
+      </tr>
+    </tbody>
+  </table></div>
+  <div class="gbox">
+    <div class="gbox-t">경쟁 우위 분석</div>
+    <p>
+      <b>핵심 해자:</b> ODT 기반 라벨프리 3D 실시간 라이브셀 이미징은 토모큐브가 사실상 유일. Zeiss·Leica는 형광 기반으로 직접 경쟁 제품 없음 = 블루오션 포지션.
+      Nanolive가 유일한 유사 기술 보유사이나 시장 침투도 미미.
+      <b>파크시스템스 비교:</b> 사외이사 동일인(박상일 대표) — 파크시스템스가 반도체 호황기에 PER 35배 이상 받은 전례가 토모큐브의 밸류에이션 상한선 근거.
+      HT-T1(유리기판 검사장비)이 반도체 산업으로 확장되면 경쟁 구도 자체가 새로운 시장 창출.
+    </p>
+  </div>
+</div>
+
+<!-- ⑧호재/악재 -->
+<div class="sec" id="tc8">
+  <div class="sec-hd"><span class="sn">08</span><span class="st">호재 · 악재 · 모멘텀</span><div class="sl"></div></div>
+  <div class="bls"><div class="blt">✅ 호재 (최신 업데이트)</div><div class="bl">
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>2026.04 수출 YoY +74.4%</b> — Q1 실적 쇼크와 완전히 다른 그림. 4월 한 달 수출이 25년 Q2 분기 수출과 비슷한 수준<a class="src" href="http://long-term-optimization.com/closing-26-1q-lto-cover-stocks/" target="_blank" rel="noopener">LTO리서치</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>HT-T1 유리기판 검사장비</b> — 복수 글로벌 기업과 논의 중. HBM/AI 반도체 패키징 혁신(하이브리드본딩·유리기판)과 직결. 고마진 반복 매출 잠재<a class="src" href="https://m.thinkpool.com/compDiscuss/cont/1016758" target="_blank" rel="noopener">씽크풀</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>2025 Q4 첫 분기 흑자</b> — 매출 50억(YoY +449%), OPM +8%. 어닝서프라이즈 +25%(추정치 상회)</div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>2026 Q3 초고가 장비 데이터 공개</b> + Q4 HT-X1 Max 출시 예정 — 하반기 대형 모멘텀 2개 연속</div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>매출총이익률 65.8% (2025)</b> — 2023년 59.5%에서 꾸준 개선. 제품 믹스 고도화 및 원가 통제 성공</div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>부채비율 7% · 현금 300억+</b> — 추가 자금조달 없이 4~5년 자체 운영 가능. 무이자발생부채 = 재무 리스크 제로</div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>FDA NAMs 동물실험 폐지 로드맵 (2035)</b> — 오가노이드·라이브셀 이미징 수요 구조적 급증. 수혜 최전선</div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>TAM 7.6조원</b> (국내 0.4조+미국 3.4조+유럽 2.9조+중국 0.7조) — 현 시총의 10배. 초기 침투 단계<a class="src" href="https://bbn.kiwoom.com/rfCR11894" target="_blank" rel="noopener">키움증권</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>감사의견 Outstanding</b> (최상위) — 재무 투명성·내부통제 최고 등급<a class="src" href="https://comp.fnguide.com/SVO2/ASP/SVD_Main.asp?gicode=A475960" target="_blank" rel="noopener">FnGuide</a></div></div>
+  </div></div>
+  <div class="bls"><div class="blt">⚠️ 악재 (업데이트)</div><div class="bl">
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>2026 Q1 매출 6.5억(YoY -46%)</b> — 충격적 비수기 결과. 연간 목표 234억 달성을 위해선 Q2~Q4에 227.5억 필요</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>VC 오버행 12%</b> 잔존 — 기관 실적 발표 전 -30만주 순매도. 주가 급등 시 물량 출회 반복 가능</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>HT-T1 실매출 기여 2027년 이후</b> — 장비 산업 리드타임 특성상 고객사 평가→계약→양산까지 1~2년 소요</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2">상반기 추가 적자 공시 예정 (Q2E 영업이익 -9억, 매출 39억) — 단기 주가 변동성 요인</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2">PSR 59배 · PBR 17.5배 — 흑자전환 전 고평가 구간. 실적 미스 시 멀티플 급수축 가능</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2">FCF -75억(2025) 지속 — 현금 소진 중이나 현재 잔고(300억)로 수년간 감당 가능</div></div>
+  </div></div>
+  <div class="bls"><div class="blt">🚀 핵심 모멘텀 (하반기 집중)</div><div class="bl">
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>2026 Q3:</b> 초고가 장비(HT-X1 Max 상위 모델 추정) 관련 데이터 공개 — 장비 단가 대폭 상승 기대<a class="src" href="https://bbn.kiwoom.com/rfCR11894" target="_blank" rel="noopener">키움증권리포트</a></div></div>
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>2026 Q4:</b> HT-X1 Max 출시 + 산업용 품질 테스트 진입 — 2027년 실적 퀀텀점프의 씨앗</div></div>
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>HT-T1 계약 공시:</b> 복수 글로벌 반도체 기업 중 첫 계약 체결 공시 시 주가 급등 촉매</div></div>
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>주주총회 CEO 비전:</b> "매년 90~100% 성장으로 세계 3D 이미징 시장 점유율 10% 달성" → 적정 기업가치 9조원 제시<a class="src" href="http://long-term-optimization.com/closing-26-1q-lto-cover-stocks/" target="_blank" rel="noopener">LTO리서치</a></div></div>
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>K-오가노이드 컨소시엄 (27개사):</b> 삼성바이오·대웅제약·한미약품 등 — 국내 수요 기반 본격 확대</div></div>
+  </div></div>
+</div>
+
+<!-- ⑨리스크 -->
+<div class="sec" id="tc9">
+  <div class="sec-hd"><span class="sn">09</span><span class="st">리스크 체크리스트</span><div class="sl"></div></div>
+  <div class="rg">
+    <div class="ri"><div class="rs rsh">9</div><div><div class="rn">연간 흑자전환 불확실</div><div class="rd2">2026E 234억 달성 여부 미확정. 하반기 집중 구조</div></div></div>
+    <div class="ri"><div class="rs rsh">8</div><div><div class="rn">밸류에이션 고평가</div><div class="rd2">PSR 59배 · PBR 17.5배. 실적 미스 시 멀티플 급수축</div></div></div>
+    <div class="ri"><div class="rs rsh">8</div><div><div class="rn">VC 오버행</div><div class="rd2">12% 물량 잔존. 급등 시 출회 반복</div></div></div>
+    <div class="ri"><div class="rs rsm">6</div><div><div class="rn">계절성 리스크</div><div class="rd2">Q1 매출 집중도 낮음. 상반기 적자 공시 계속</div></div></div>
+    <div class="ri"><div class="rs rsm">5</div><div><div class="rn">HT-T1 지연 리스크</div><div class="rd2">유리기판 실매출 2027H2 이전 어려움</div></div></div>
+    <div class="ri"><div class="rs rsm">5</div><div><div class="rn">FCF 적자 지속</div><div class="rd2">-75억(2025). 현금 300억이 버퍼</div></div></div>
+    <div class="ri"><div class="rs rsl">3</div><div><div class="rn">재무 안정성</div><div class="rd2">부채비율 7% · 현금 300억. 리스크 매우 낮음</div></div></div>
+    <div class="ri"><div class="rs rsl">2</div><div><div class="rn">경쟁 위협</div><div class="rd2">ODT 직접 경쟁자 사실상 없음. 블루오션</div></div></div>
+  </div>
+  <div style="margin-top:12px;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">종합 리스크 점수</span>
+    <div class="rtbar"><div class="rtfill" style="width:46%"></div></div>
+    <span style="font-family:var(--fd);font-size:26px;color:var(--ac)">46/100</span>
+    <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">(중간 리스크 · 성장주 특성)</span>
+  </div>
+</div>
+
+<!-- ⑩타임라인 -->
+<div class="sec" id="tc10">
+  <div class="sec-hd"><span class="sn">10</span><span class="st">뉴스 · 공시 타임라인</span><div class="sl"></div></div>
+  <div class="tline">
+
+    <div class="tli"><div class="tld r"></div>
+      <div class="tldate">2026.05.15 (예정)</div>
+      <div class="tltitle">2026 Q1 실적 공식 발표 확정 <span class="tltag tn2">ALERT</span></div>
+      <div class="tlbody">매출 6.5억(YoY -46%), 영업이익 -30.1억. 주가 하방 압력 예상되나 4월 수출 +74% 데이터가 완충 역할<a class="src" href="https://m.thinkpool.com/stockDiscuss/475960/cont/11788965" target="_blank" rel="noopener">씽크풀</a></div>
+    </div>
+
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2026.05.08 (현재)</div>
+      <div class="tltitle">4월 수출 YoY +74.4% 확인 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">4월 한 달 수출이 2025년 Q2 분기 수출에 육박. Q1 쇼크 이후 빠른 반등 신호. 2026 연간 실적 가이던스 유지 근거<a class="src" href="http://long-term-optimization.com/closing-26-1q-lto-cover-stocks/" target="_blank" rel="noopener">LTO리서치</a></div>
+    </div>
+
+    <div class="tli"><div class="tld b"></div>
+      <div class="tldate">2026.02.11</div>
+      <div class="tltitle">HT-T1 유리기판 검사장비 논의 공개 <span class="tltag tp">게임체인저</span></div>
+      <div class="tlbody">복수의 글로벌 기업과 유리기판 TGV 비파괴 3D 검측장비 HT-T1 논의 중. 2026년 고객사 평가 본격화 예정. 하이브리드본딩 차세대 패키징 기술과 직결<a class="src" href="https://m.thinkpool.com/compDiscuss/cont/1016758" target="_blank" rel="noopener">씽크풀</a></div>
+    </div>
+
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2026.02.09</div>
+      <div class="tltitle">키움증권 리포트: 목표가 80,000원 유지 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">4Q25 실적 추정치 25% 상회. 2026E 매출 234억, 영업이익 18억(흑전). TAM 7.6조원 추산. Buy 유지<a class="src" href="https://bbn.kiwoom.com/rfCR11894" target="_blank" rel="noopener">키움증권리포트</a></div>
+    </div>
+
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2026.02.12</div>
+      <div class="tltitle">2025 Q4 영업이익 +4억 — 분기 첫 흑자 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">매출 50억(YoY +449%), OPM +8.0%. 추정치 25% 상회. HT-X1 mini 국내 수요 + 산업용 모듈 2건 인식이 견인<a class="src" href="https://buffettlab.co.kr/news/view.php?idx=52668" target="_blank" rel="noopener">버핏연구소</a></div>
+    </div>
+
+    <div class="tli"><div class="tld"></div>
+      <div class="tldate">2025.12.23</div>
+      <div class="tltitle">대신증권 IPO 분석: 2026 BEP 통과, 2027 퀀텀점프 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">2026 매출 160~180억으로 BEP 통과. 실질 실적 퀀텀점프는 2027년에 가시화. 현금 300억 재무 리스크 제한적<a class="src" href="https://money2.daishin.com/PDF/Out/intranet_data/Product/ResearchCenter/Report/2025/12/56152_2H25_IPO_tomocube.pdf" target="_blank" rel="noopener">대신증권IPO리포트</a></div>
+    </div>
+
+    <div class="tli"><div class="tld"></div>
+      <div class="tldate">2025.12.15</div>
+      <div class="tltitle">K-오가노이드 컨소시엄 27개사 출범 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">삼성바이오·대웅제약·한미약품 등 참여. 국내 수요 기반 본격 확대<a class="src" href="https://www.butler.works/ko/companies/01573336" target="_blank" rel="noopener">버틀러</a></div>
+    </div>
+
+    <div class="tli"><div class="tld r"></div>
+      <div class="tldate">2025.09.20</div>
+      <div class="tltitle">VC 보호예수 일부 해제 <span class="tltag tb">악재</span></div>
+      <div class="tlbody">VC 물량 출회. 단기 수급 부담. 잔여 12% 오버행 해소까지 지속적 변동성 요인</div>
+    </div>
+
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2025.03.12</div>
+      <div class="tltitle">FDA 동물실험 폐지 NAMs 로드맵 발표 <span class="tltag tp">패러다임 전환</span></div>
+      <div class="tlbody">2035년까지 단계적 폐지 공식화. 오가노이드·라이브셀 이미징 수요 구조적 급증. 토모큐브 ODT 기술 직접 수혜<a class="src" href="https://bbn.kiwoom.com/rfCR11894" target="_blank" rel="noopener">키움증권</a></div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /.pcontent -->
+</div><!-- /#p0 -->
+
+<!-- ████ PANEL 1: 아이티센글로벌 (완전체) ████ -->
+<div class="panel" id="p1">
+
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row">
+      <span class="badge bi2">IT서비스</span>
+      <span class="badge bm">웹3·RWA</span>
+      <span class="badge" style="background:rgba(255,215,0,.15);color:#FFD700">한국금거래소</span>
+      <span class="pdate">분석일 2026.05.08</span>
+    </div>
+    <div class="pname">아이티센글로벌</div>
+    <div class="pcode">220100 · KOSDAQ · WI26 소프트웨어 · NXT</div>
+    <div class="pdesc">국내 최대 IT서비스 그룹 × 디지털 금 플랫폼 × 웹3/RWA · 2025 사상 최대 실적 달성 · 2026 Q1도 역대 최대 경신</div>
+  </div>
+  <div class="phero-r">
+    <div class="kpi"><div class="kpi-l">현재가</div><div class="kpi-v ka">58,000</div></div>
+    <div class="kpi"><div class="kpi-l">52주 고/저</div><div class="kpi-v">75,500/19,300</div></div>
+    <div class="kpi"><div class="kpi-l">시가총액</div><div class="kpi-v ka">13,482억</div></div>
+    <div class="kpi"><div class="kpi-l">2025 매출</div><div class="kpi-v kg">8.87조</div></div>
+    <div class="kpi"><div class="kpi-l">2026Q1 영업익</div><div class="kpi-v kg">338억(+772%)</div></div>
+    <div class="kpi"><div class="kpi-l">ROE (2025)</div><div class="kpi-v kg">45.89%</div></div>
+    <div class="kpi"><div class="kpi-l">PER (2025)</div><div class="kpi-v ka">15.07배</div></div>
+    <div class="kpi"><div class="kpi-l">BPS</div><div class="kpi-v">5,404원</div></div>
+    <div class="kpi"><div class="kpi-l">목표가 (BNK)</div><div class="kpi-v ka">68,000</div></div>
+  </div>
+</div>
+
+<div class="alert alert-good" style="margin:0 16px 0">
+  <div class="alert-icon">🚀</div>
+  <div class="alert-body"><b>2026 Q1 역대 최대 경신:</b> 매출 1조 6,366억(YoY +80%) · 영업이익 338억(YoY +772%) · 순이익 262억(YoY +1,400%). 별도 매출 210억(+200%), 영업이익 22억 흑자전환. 웹3+IT서비스 동반 성장 지속</div>
+</div>
+
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on" onclick="ss('ic1',this)">개요</div>
+  <div class="sb" onclick="ss('ic2',this)">차트분석</div>
+  <div class="sb" onclick="ss('ics',this)" style="color:var(--ac)">📊 수급분석</div>
+  <div class="sb" onclick="ss('ic3',this)">실적심층</div>
+  <div class="sb" onclick="ss('ic4',this)">재무구조</div>
+  <div class="sb" onclick="ss('ic5',this)">밸류에이션</div>
+  <div class="sb" onclick="ss('ic6',this)">전망/전략</div>
+  <div class="sb" onclick="ss('ic7',this)">경쟁사</div>
+  <div class="sb" onclick="ss('ic8',this)">호재/악재</div>
+  <div class="sb" onclick="ss('ic9',this)">리스크</div>
+  <div class="sb" onclick="ss('ic10',this)">타임라인</div>
+</div></div>
+
+<div class="pcontent">
+
+<!-- ①개요 -->
+<div class="sec" id="ic1">
+  <div class="sec-hd"><span class="sn">01</span><span class="st">종목 개요</span><div class="sl"></div></div>
+  <div class="stat-row">
+    <div class="stat-box"><div class="stat-num" style="color:var(--ac)">+378%</div><div class="stat-lbl">2025 영업이익 YoY</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--gn)">+772%</div><div class="stat-lbl">2026Q1 영업이익 YoY</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--gn)">45.9%</div><div class="stat-lbl">ROE (2025)</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--bl)">10조</div><div class="stat-lbl">디지털금 생태계 목표 (5년)</div></div>
+  </div>
+  <div class="two">
+    <div class="ic"><div class="ic-t">기본 정보</div>
+      <div class="kv"><span class="kk">종목코드</span><span class="kv2">220100 · KOSDAQ</span></div>
+      <div class="kv"><span class="kk">섹터</span><span class="kv2">WI26 소프트웨어 · NXT</span></div>
+      <div class="kv"><span class="kk">시가총액</span><span class="kv2 va">13,482억원</span></div>
+      <div class="kv"><span class="kk">현재가 (5/8)</span><span class="kv2">58,000원 (+0.35%)</span></div>
+      <div class="kv"><span class="kk">52주 고/저</span><span class="kv2">75,500 / 19,300</span></div>
+      <div class="kv"><span class="kk">PER (2025A)</span><span class="kv2 vg">15.07배</span></div>
+      <div class="kv"><span class="kk">PBR (2025A)</span><span class="kv2 va">5.61배</span></div>
+      <div class="kv"><span class="kk">EPS (2025A)</span><span class="kv2 vg">2,010원</span></div>
+      <div class="kv"><span class="kk">BPS (2025A)</span><span class="kv2">5,404원</span></div>
+      <div class="kv"><span class="kk">감사 리스크</span><span class="kv2 va">Neutral · 채무보증 결정 주의</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">사업구조 (3-Axis)</div>
+      <div class="kv"><span class="kk">사업축 1 (비IT)</span><span class="kv2 vg">비IT부문 91.93% (2025Q4)</span></div>
+      <div class="kv"><span class="kk">핵심</span><span class="kv2">한국금거래소 · 금 유통·디지털화</span></div>
+      <div class="kv"><span class="kk">사업축 2 (IT)</span><span class="kv2 va">IT서비스 13.43% (2025Q4)</span></div>
+      <div class="kv"><span class="kk">핵심</span><span class="kv2">씨티에스 · 엔텍 · AI인프라</span></div>
+      <div class="kv"><span class="kk">사업축 3 (웹3)</span><span class="kv2 vg">웹3·RWA 신성장</span></div>
+      <div class="kv"><span class="kk">플랫폼</span><span class="kv2">센골드·금방금방·골드스테이션</span></div>
+      <div class="kv"><span class="kk">센골드 누적</span><span class="kv2 vg">거래 1조원·회원 118만명</span></div>
+      <div class="kv"><span class="kk">글로벌 파트너</span><span class="kv2">日 JPYC·미쓰이물산 동맹</span></div>
+      <div class="kv"><span class="kk">CB 발행</span><span class="kv2 va">KCGI 400억 (2026.05)</span></div>
+      <div class="kv"><span class="kk">5년 목표</span><span class="kv2 vg">글로벌 RWA 10조 생태계<a class="src" href="https://www.etnews.com/20260305000149" target="_blank" rel="noopener">전자신문</a></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ②차트 -->
+<div class="sec" id="ic2">
+  <div class="sec-hd"><span class="sn">02</span><span class="st">주가 차트 분석</span><div class="sl"></div></div>
+  <div class="nb"><p>📷 <b>images/itcen_daily.png</b>(6개월 일봉) · <b>images/itcen_weekly.png</b>(2년 주봉) 업로드 시 자동 표시</p></div>
+  <div class="cw">
+    <div class="ch"><span class="chl">📊 일봉 6개월</span><span class="chr">2026.05.08 기준</span></div>
+    <div class="cb">
+      <img src="images/itcen_daily.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/itcen_daily.png</div></div>
+    </div>
+    <div class="cap"><b>단기 해석:</b> 52주 최고 75,500원(03/13) → 현재 58,000원 (-23%). 최저 19,300원(11/18) 대비 +200% 상승. 3월 고점 이후 조정 중. 5일·20일선 위에서 지지 받는 구조. 심리도 40~50선 — 중립 구간.</div>
+  </div>
+  <div class="cw">
+    <div class="ch"><span class="chl">📊 주봉 2년</span><span class="chr">2026.05.08 기준</span></div>
+    <div class="cb">
+      <img src="images/itcen_weekly.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/itcen_weekly.png</div></div>
+    </div>
+    <div class="cap"><b>장기 해석:</b> 2024.06 저점 3,690원 → 2026.03 고점 75,500원 = +1,945% 대세 상승. 2024년 말부터 폭발적 상승 시작. 현재 고점比 -23% 조정이나 장기 상승 추세 유지. 120주 이평선 대비 크게 위에 위치.</div>
+  </div>
+  <div class="two">
+    <div class="ic"><div class="ic-t">차트 기술적 분석</div>
+      <div class="kv"><span class="kk">현재 위치</span><span class="kv2 va">고점比 -23% 눌림목</span></div>
+      <div class="kv"><span class="kk">장기 추세</span><span class="kv2 vg">우상향 유지 중</span></div>
+      <div class="kv"><span class="kk">심리도 (10)</span><span class="kv2">40~50선 중립</span></div>
+      <div class="kv"><span class="kk">거래량</span><span class="kv2">적정 수준 유지</span></div>
+      <div class="kv"><span class="kk">지지선</span><span class="kv2">50,000원 / 45,000원</span></div>
+      <div class="kv"><span class="kk">저항선</span><span class="kv2">65,000원 / 75,500원</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">멀티팩터 스타일 분석</div>
+      <div class="kv"><span class="kk">성장성</span><span class="kv2 vg">업종 대비 압도적 우위</span></div>
+      <div class="kv"><span class="kk">모멘텀</span><span class="kv2 vg">강력 (1년 +200% 이상)</span></div>
+      <div class="kv"><span class="kk">밸류</span><span class="kv2 va">PER 15배 — 적정 수준</span></div>
+      <div class="kv"><span class="kk">수익건전성</span><span class="kv2 vg">ROE 45.9% — 최상급</span></div>
+      <div class="kv"><span class="kk">기업규모</span><span class="kv2">중형 성장주</span></div>
+      <div class="kv"><span class="kk">감사 리스크</span><span class="kv2 va">Neutral (채무보증 주의)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ★수급분석 -->
+<div class="sec" id="ics">
+  <div class="sec-hd"><span class="sn" style="color:var(--ac)">S</span><span class="st">수급 심층 분석</span><div class="sl"></div></div>
+
+  <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-bottom:14px">
+    📅 분석 기간: 2026.02.09 ~ 2026.05.08 (3개월) · 데이터 출처: HTS 종목별 기관매매추이
+  </div>
+
+  <!-- 3개월 누적 수급 KPI -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">
+    <div class="kpi" style="border-color:rgba(231,76,60,.3)">
+      <div class="kpi-l">개인 누적 (3M)</div>
+      <div class="kpi-v" style="color:var(--rd);font-size:15px">+148,429주</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:3px">평균단가 55,238원</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(59,130,246,.4)">
+      <div class="kpi-l">기관 누적 (3M)</div>
+      <div class="kpi-v" style="color:var(--bl);font-size:15px">+180,435주</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--ac);margin-top:3px">⭐ 기관 주도 매수</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(46,204,113,.3)">
+      <div class="kpi-l">외국인 누적 (3M)</div>
+      <div class="kpi-v" style="color:var(--gn);font-size:15px">+5,192주</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:3px">평균단가 55,614원</div>
+    </div>
+    <div class="kpi" style="border-color:rgba(168,85,247,.3)">
+      <div class="kpi-l">외국인 소진율</div>
+      <div class="kpi-v" style="color:var(--pu);font-size:15px">5.67%</div>
+      <div style="font-family:var(--fm);font-size:9px;color:var(--mu);margin-top:3px">3M 변화 거의 없음</div>
+    </div>
+  </div>
+
+  <!-- 핵심 수급 해석 알림 -->
+  <div class="alert alert-good" style="margin-bottom:14px">
+    <div class="alert-icon">🏦</div>
+    <div class="alert-body">
+      <b>[3개월 수급 핵심 해석]</b> 토모큐브와 정반대 패턴 — <b>기관이 18만주 이상 대량 순매수</b>하며 수급을 주도했다.
+      평균 매수단가 60,835원은 현재가(58,000원) 대비 높아 기관이 단기 손실 상태이나, <b>이는 기관이 확신을 갖고 고점 부근에서도 지속 매집했다는 의미</b>.
+      외국인은 소진율이 5.7%대에서 거의 변하지 않아 관망 중. 개인+기관 동반 순매수 = <b>가장 건강한 수급 구조.</b>
+    </div>
+  </div>
+
+  <div class="two" style="margin-bottom:14px">
+
+    <!-- 구간별 수급 흐름표 -->
+    <div class="ic" style="padding:0">
+      <div class="ic-t" style="padding:10px 14px;border-bottom:1px solid var(--bd)">📋 구간별 수급 흐름 (누적 기준)</div>
+      <div style="padding:0">
+        <table style="width:100%;border-collapse:collapse;font-family:var(--fm);font-size:11px">
+          <thead>
+            <tr style="background:rgba(255,255,255,.03)">
+              <th style="padding:7px 10px;text-align:left;color:var(--mu);font-weight:500;border-bottom:1px solid var(--bd)">구간</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--rd);border-bottom:1px solid var(--bd)">개인</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--bl);border-bottom:1px solid var(--bd)">기관</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--gn);border-bottom:1px solid var(--bd)">외국인</th>
+              <th style="padding:7px 6px;text-align:right;color:var(--mu);border-bottom:1px solid var(--bd)">소진율</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:6px 10px;color:var(--tx)">2/09~2/28<br><span style="color:var(--mu);font-size:9px">초기 상승 구간</span></td>
+              <td style="padding:6px;text-align:right;color:#90EE90">+189,563</td>
+              <td style="padding:6px;text-align:right;color:#F08080">-36,320</td>
+              <td style="padding:6px;text-align:right;color:#F08080">-97,976</td>
+              <td style="padding:6px;text-align:right;color:var(--mu)">5.7%→5.4%</td>
+            </tr>
+            <tr style="background:rgba(231,76,60,.04)">
+              <td style="padding:6px 10px;color:var(--tx)">3/01~3/24<br><span style="color:var(--mu);font-size:9px">고점 랠리·기관 폭발 매수</span></td>
+              <td style="padding:6px;text-align:right;color:#F08080">-572,644</td>
+              <td style="padding:6px;text-align:right;color:#7EC8E3">+710,634</td>
+              <td style="padding:6px;text-align:right;color:#90EE90">+294,942</td>
+              <td style="padding:6px;text-align:right;color:var(--ac)">5.4%→6.2%</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 10px;color:var(--tx)">3/25~3/31<br><span style="color:var(--mu);font-size:9px">고점 조정 시작</span></td>
+              <td style="padding:6px;text-align:right;color:#90EE90">+320,885</td>
+              <td style="padding:6px;text-align:right;color:#F08080">-106,146</td>
+              <td style="padding:6px;text-align:right;color:#F08080">-213,642</td>
+              <td style="padding:6px;text-align:right;color:var(--mu)">6.2%→5.6%</td>
+            </tr>
+            <tr style="background:rgba(59,130,246,.04)">
+              <td style="padding:6px 10px;color:var(--bl)">4/01~4/30<br><span style="color:var(--mu);font-size:9px">기관 지속 매수 (핵심)</span></td>
+              <td style="padding:6px;text-align:right;color:#F08080">-158,821</td>
+              <td style="padding:6px;text-align:right;color:#7EC8E3;font-weight:700">+520,284</td>
+              <td style="padding:6px;text-align:right;color:#F08080">-60,593</td>
+              <td style="padding:6px;text-align:right;color:var(--mu)">5.6%→5.4%</td>
+            </tr>
+            <tr style="background:rgba(240,165,0,.04)">
+              <td style="padding:6px 10px;color:var(--ac)"><b>5/04~5/08</b><br><span style="color:var(--mu);font-size:9px">최근 5거래일</span></td>
+              <td style="padding:6px;text-align:right;color:#90EE90"><b>+121,218</b></td>
+              <td style="padding:6px;text-align:right;color:#7EC8E3"><b>+197,189</b></td>
+              <td style="padding:6px;text-align:right;color:#90EE90"><b>+5,896</b></td>
+              <td style="padding:6px;text-align:right;color:var(--ac)">→5.67%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 투자주체별 행동 해석 -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="ic">
+        <div class="ic-t">🏦 기관 행동 분석 <span style="color:var(--ac);font-size:10px">★핵심</span></div>
+        <div class="kv"><span class="kk">3/24 단일 최대</span><span class="kv2 vg">+128,351주 (3.18조 거래일)</span></div>
+        <div class="kv"><span class="kk">3월 누적</span><span class="kv2 vg">+637,975주 대규모 매집</span></div>
+        <div class="kv"><span class="kk">4월 지속</span><span class="kv2 vg">+520,284주 추가 매수</span></div>
+        <div class="kv"><span class="kk">평균 매수단가</span><span class="kv2 va">60,835원 (현재가 上)</span></div>
+        <div class="kv"><span class="kk">해석</span><span class="kv2 vg">손실에도 지속 매집 = 강한 확신 포지션. 하반기 재료 선반영 가능성</span></div>
+      </div>
+      <div class="ic">
+        <div class="ic-t">🌍 외국인 행동 분석</div>
+        <div class="kv"><span class="kk">3/24 단일 최대</span><span class="kv2 vg">+294,942주 (고점 급등일)</span></div>
+        <div class="kv"><span class="kk">이후 추세</span><span class="kv2 vr">3/25~ 지속 순매도</span></div>
+        <div class="kv"><span class="kk">소진율 변화</span><span class="kv2">5.70% → 5.67% (거의 변화없음)</span></div>
+        <div class="kv"><span class="kk">5월 초 전환</span><span class="kv2 vg">+5,896주 소폭 매수 전환</span></div>
+        <div class="kv"><span class="kk">해석</span><span class="kv2 va">고점 차익 실현 후 관망. 소진율 유지 = 추가 대규모 매도 없음</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 주요 변곡점 수급 이벤트 -->
+  <div class="ic" style="margin-bottom:14px">
+    <div class="ic-t">⚡ 주목할 수급 변곡점 이벤트</div>
+    <table style="width:100%;border-collapse:collapse;font-family:var(--fm);font-size:11px">
+      <thead>
+        <tr style="background:rgba(255,255,255,.03)">
+          <th style="padding:7px 10px;text-align:left;color:var(--mu);font-weight:500;border-bottom:1px solid var(--bd)">날짜</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--mu);border-bottom:1px solid var(--bd)">종가</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--mu);border-bottom:1px solid var(--bd)">등락률</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--rd);border-bottom:1px solid var(--bd)">개인</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--bl);border-bottom:1px solid var(--bd)">기관</th>
+          <th style="padding:7px 8px;text-align:right;color:var(--gn);border-bottom:1px solid var(--bd)">외국인</th>
+          <th style="padding:7px 10px;text-align:left;color:var(--mu);border-bottom:1px solid var(--bd)">해석</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:6px 10px;color:var(--tx)">3/05</td>
+          <td style="padding:6px 8px;text-align:right">59,700</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+24.63%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-63,629</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-17,992</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+137,608</td>
+          <td style="padding:6px 10px;color:var(--mu)">외국인 급등 견인. 거래량 139만주. 개인·기관은 차익실현</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 10px;color:var(--tx)">3/10</td>
+          <td style="padding:6px 8px;text-align:right">64,600</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+15.56%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-335,429</td>
+          <td style="padding:6px 8px;text-align:right;color:#7EC8E3">+301,296</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+85,224</td>
+          <td style="padding:6px 10px;color:var(--ac)">기관 +30만주 폭발 매수. 개인 대규모 차익실현. 랠리 가속</td>
+        </tr>
+        <tr style="background:rgba(59,130,246,.06)">
+          <td style="padding:6px 10px;color:var(--bl);font-weight:700">3/24 🔵</td>
+          <td style="padding:6px 8px;text-align:right">56,400</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+8.25%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-415,288</td>
+          <td style="padding:6px 8px;text-align:right;color:#7EC8E3;font-weight:700">+128,351</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+294,942</td>
+          <td style="padding:6px 10px;color:var(--bl)"><b>역대 최대 거래일(318만주).</b> 기관+외국인 동반 폭발 매수. 개인만 415K 출회</td>
+        </tr>
+        <tr style="background:rgba(231,76,60,.06)">
+          <td style="padding:6px 10px;color:var(--rd)">3/23 🔴</td>
+          <td style="padding:6px 8px;text-align:right">51,000</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--rd)">-17.07%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-11,848</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-74,054</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+80,157</td>
+          <td style="padding:6px 10px;color:var(--rd)">-17% 충격 급락. 외국인만 역매수. 기관·개인 이탈</td>
+        </tr>
+        <tr style="background:rgba(46,204,113,.04)">
+          <td style="padding:6px 10px;color:var(--gn)">4/27 🟢</td>
+          <td style="padding:6px 8px;text-align:right">53,200</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+15.03%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-94,440</td>
+          <td style="padding:6px 8px;text-align:right;color:#7EC8E3">+6,903</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+65,174</td>
+          <td style="padding:6px 10px;color:var(--mu)">+15% 급등. 거래량 114만주. 외국인 재매수 시작</td>
+        </tr>
+        <tr style="background:rgba(240,165,0,.04)">
+          <td style="padding:6px 10px;color:var(--ac)">5/04 ⭐</td>
+          <td style="padding:6px 8px;text-align:right">61,200</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+13.12%</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-34,412</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-8,652</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+53,780</td>
+          <td style="padding:6px 10px;color:var(--ac)">거래량 105만주. 외국인 +53K 매수. 최근 반등 주도</td>
+        </tr>
+        <tr style="background:rgba(59,130,246,.04)">
+          <td style="padding:6px 10px;color:var(--bl)">5/08 📍</td>
+          <td style="padding:6px 8px;text-align:right">58,000</td>
+          <td style="padding:6px 8px;text-align:right;color:var(--gn)">+0.35%</td>
+          <td style="padding:6px 8px;text-align:right;color:#90EE90">+27,211</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-16,754</td>
+          <td style="padding:6px 8px;text-align:right;color:#F08080">-704</td>
+          <td style="padding:6px 10px;color:var(--bl)"><b>현재 기준일.</b> 소폭 보합. 3주체 모두 소강상태. 방향 결정 대기</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 종합 판단 -->
+  <div class="two">
+    <div class="sbox" style="margin-bottom:0">
+      <div class="sbox-t">🎯 수급 패턴 종합 판단</div>
+      <p>
+        <b>① 기관의 고단가 대량 매집 = 가장 강한 강세 신호</b><br>
+        기관은 3~4월에 걸쳐 평균 60,835원에 총 18만주 이상을 순매수했다. 현재가(58,000원)보다 높은 단가에서도 지속 매집했다는 것은, 기관이 단순 단기 트레이딩이 아닌 <b>중기 가치 판단하에 포지션을 구축했음</b>을 의미한다.<br><br>
+        <b>② 3/24 318만주 역대 최대 거래일의 해석</b><br>
+        기관+외국인 동반 대규모 매수 vs 개인 41만주 출회. 이 날은 단순한 변동성이 아니라 <b>대규모 수급 주체 교체일</b>이었다. 물량을 넘겨받은 것은 기관과 외국인. 이 구조는 중장기적으로 우호적이다.<br><br>
+        <b>③ 외국인 소진율 5.7% 안정 = 잠재 수급 여력 존재</b><br>
+        소진율이 3개월간 거의 변화 없음 → 외국인이 관망 중. 향후 외국인이 적극 매수 전환 시 추가 상승 탄력 기대 가능.
+      </p>
+    </div>
+    <div class="ic">
+      <div class="ic-t">📊 수급 기반 매매 시그널</div>
+      <div class="kv"><span class="kk">현재 수급 국면</span><span class="kv2 vg">기관 매집 완료 · 방향 대기</span></div>
+      <div class="kv"><span class="kk">기관 포지션</span><span class="kv2 vg">18만주+ 순매수 (강세 신호)</span></div>
+      <div class="kv"><span class="kk">외국인 포지션</span><span class="kv2 va">관망 · 소진율 5.67% 안정</span></div>
+      <div class="kv"><span class="kk">개인 포지션</span><span class="kv2 va">고점 차익실현 후 재매수</span></div>
+      <div class="kk" style="padding:4px 0;font-size:9px;color:var(--mu)">토모큐브와의 비교</div>
+      <div class="kv"><span class="kk">수급 구조 우위</span><span class="kv2 vg">아이티센 압도적 우위</span></div>
+      <div class="kv"><span class="kk">단기 지지 구간</span><span class="kv2">55,000~58,000원 (기관 매수 단가)</span></div>
+      <div class="kv"><span class="kk">종합 신호</span><span class="kv2 vg">✅ 긍정 — 기관 매집 = 매수 근거</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ③실적 -->
+<div class="sec" id="ic3">
+  <div class="sec-hd"><span class="sn">03</span><span class="st">실적 심층 분석</span><div class="sl"></div></div>
+  <div class="alert alert-good" style="margin-bottom:14px">
+    <div class="alert-icon">📈</div>
+    <div class="alert-body"><b>2026 Q1 역대 최대:</b> 매출 1조 6,366억(YoY +80%), 영업이익 338억(+772%), 순이익 262억(+1,400%). 금값 상승+웹3 플랫폼 폭발적 성장 지속</div>
+  </div>
+  <div class="ic" style="margin-bottom:12px"><div class="ic-t">연간 영업이익 추이 (억원)</div>
+    <div style="padding:8px 0">
+      <div class="bar-row"><span class="bar-yr">2022A</span><div class="bar-wrap"><div class="bar-fill" style="width:11%"></div></div><span class="bar-val" style="color:var(--tx)">304</span></div>
+      <div class="bar-row"><span class="bar-yr">2023A</span><div class="bar-wrap"><div class="bar-fill" style="width:11%"></div></div><span class="bar-val" style="color:var(--tx)">305</span></div>
+      <div class="bar-row"><span class="bar-yr">2024A</span><div class="bar-wrap"><div class="bar-fill" style="width:21%"></div></div><span class="bar-val" style="color:var(--tx)">586</span></div>
+      <div class="bar-row"><span class="bar-yr">2025A</span><div class="bar-wrap"><div class="bar-fill" style="width:100%"></div></div><span class="bar-val" style="color:var(--gn)">2,799</span></div>
+      <div class="bar-row"><span class="bar-yr">2026Q1A</span><div class="bar-wrap"><div class="bar-fill est" style="width:12%"></div></div><span class="bar-val" style="color:var(--ac)">338</span></div>
+    </div>
+  </div>
+  <div class="tw" style="margin-bottom:12px"><table>
+    <thead><tr><th style="text-align:left">항목 (억원)</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th><th>2026Q1A</th></tr></thead>
+    <tbody>
+      <tr class="bold"><td>매출액</td><td>26,211</td><td>28,151</td><td>49,618</td><td class="pos">88,708</td><td class="pos">16,366</td></tr>
+      <tr class="hl"><td>영업이익</td><td>304</td><td>305</td><td>586</td><td class="pos">2,799</td><td class="pos">338</td></tr>
+      <tr><td>당기순이익</td><td>312</td><td class="neg">-62</td><td>361</td><td class="pos">1,983</td><td class="pos">262</td></tr>
+      <tr><td>지배주주 순이익</td><td>17</td><td>7</td><td>43</td><td class="pos">467</td><td class="pos">76</td></tr>
+      <tr><td>매출총이익률(%)</td><td>5.92</td><td>5.89</td><td>4.08</td><td class="pos">5.04</td><td>—</td></tr>
+      <tr><td>OPM(%)</td><td>1.16</td><td>1.08</td><td>1.18</td><td class="pos">3.16</td><td class="pos">2.07</td></tr>
+      <tr class="est"><td>YoY 매출성장</td><td class="neg">-20%</td><td>+7%</td><td>+76%</td><td class="pos">+79%</td><td class="pos">+80%</td></tr>
+      <tr class="est"><td>YoY 영업익성장</td><td class="neg">-3%</td><td>+0%</td><td>+92%</td><td class="pos">+378%</td><td class="pos">+772%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tw"><table>
+    <thead><tr><th style="text-align:left">분기 (억원)</th><th>2025Q1</th><th>2025Q2</th><th>2025Q3</th><th>2025Q4</th><th>2026Q1A</th></tr></thead>
+    <tbody>
+      <tr class="bold"><td>매출액</td><td>16,366</td><td>12,667</td><td>17,273</td><td class="pos">42,403</td><td class="pos">16,366</td></tr>
+      <tr class="hl"><td>영업이익</td><td>338</td><td>216</td><td>645</td><td class="pos">1,601</td><td class="pos">338</td></tr>
+      <tr><td>당기순이익</td><td>262</td><td>172</td><td>465</td><td class="pos">1,084</td><td class="pos">262</td></tr>
+      <tr><td>OPM(%)</td><td>2.07</td><td>1.70</td><td>3.73</td><td class="pos">3.77</td><td class="pos">2.07</td></tr>
+    </tbody>
+  </table></div>
+  <div class="sbox">
+    <div class="sbox-t">실적 핵심 해석</div>
+    <p>
+      2025년은 <b>비IT부문(한국금거래소) 91.9% 비중</b>으로 완전히 재편. 금값 상승 사이클과 맞물려 영업이익 +378% 어닝서프라이즈 달성.
+      2026 Q1에서도 웹3 플랫폼(금방금방 거래액 QoQ +135%) 고성장으로 <b>1분기 기준 역대 최대 경신</b>.
+      단, 2025 Q4(매출 4.24조)는 연말 집중 거래 특수가 있어 Q1 대비 매출 격차가 큰 편.
+      핵심 이슈: <b>2025 지배주주 순이익 467억 vs 비지배주주 1,516억</b> — 지배주주 귀속 이익 비중이 낮아 주주가치 관점에서 주의 필요.
+    </p>
+  </div>
+</div>
+
+<!-- ④재무구조 -->
+<div class="sec" id="ic4">
+  <div class="sec-hd"><span class="sn">04</span><span class="st">재무 구조 분석</span><div class="sl"></div></div>
+  <div class="tw" style="margin-bottom:12px"><table>
+    <thead><tr><th style="text-align:left">재무상태 (억원)</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th></tr></thead>
+    <tbody>
+      <tr class="bold"><td>자산총계</td><td>8,305</td><td>7,774</td><td>9,454</td><td class="pos">15,994</td></tr>
+      <tr><td>유동자산</td><td>5,785</td><td>5,626</td><td>6,566</td><td class="pos">12,480</td></tr>
+      <tr class="hl2"><td>부채총계</td><td>5,561</td><td>4,930</td><td>6,229</td><td class="neg">10,876</td></tr>
+      <tr><td>유동부채</td><td>4,952</td><td>4,813</td><td>5,501</td><td class="neg">10,224</td></tr>
+      <tr class="bold hl"><td>자본총계</td><td>2,744</td><td>2,844</td><td>3,225</td><td class="pos">5,118</td></tr>
+      <tr><td>지배주주 자본</td><td>534</td><td>690</td><td>779</td><td>1,254</td></tr>
+      <tr><td>비지배주주 자본</td><td>2,211</td><td>2,154</td><td>2,446</td><td>3,864</td></tr>
+      <tr><td>기말현금</td><td>1,830</td><td>1,379</td><td>1,756</td><td class="pos">3,972</td></div>
+    </tbody>
+  </table></div>
+  <div class="three">
+    <div class="ic"><div class="ic-t">안정성 (2025A)</div>
+      <div class="kv"><span class="kk">유동비율</span><span class="kv2 va">122.06%</span></div>
+      <div class="kv"><span class="kk">당좌비율</span><span class="kv2 va">79.08%</span></div>
+      <div class="kv"><span class="kk">부채비율</span><span class="kv2 vr">212.50%</span></div>
+      <div class="kv"><span class="kk">유보율</span><span class="kv2 vg">1,009%</span></div>
+      <div class="kv"><span class="kk">이자보상배율</span><span class="kv2 vg">24.19배</span></div>
+      <div class="kv"><span class="kk">자기자본비율</span><span class="kv2">32.00%</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">수익성 (2025A)</div>
+      <div class="kv"><span class="kk">OPM</span><span class="kv2 va">3.16%</span></div>
+      <div class="kv"><span class="kk">순이익률</span><span class="kv2 va">2.96%</span></div>
+      <div class="kv"><span class="kk">ROA</span><span class="kv2 vg">15.58%</span></div>
+      <div class="kv"><span class="kk">ROE</span><span class="kv2 vg">45.89%</span></div>
+      <div class="kv"><span class="kk">ROIC</span><span class="kv2 vg">48.08%</span></div>
+      <div class="kv"><span class="kk">EBITDA 마진</span><span class="kv2">3.32%</span></div>
+    </div>
+    <div class="ic"><div class="ic-t">현금흐름 (억원)</div>
+      <div class="kv"><span class="kk">영업CF (2024)</span><span class="kv2 vg">+264</span></div>
+      <div class="kv"><span class="kk">영업CF (2025)</span><span class="kv2 vg">+2,382</span></div>
+      <div class="kv"><span class="kk">투자CF (2025)</span><span class="kv2 vr">-1,011</span></div>
+      <div class="kv"><span class="kk">재무CF (2025)</span><span class="kv2 vg">+848</span></div>
+      <div class="kv"><span class="kk">FCF (2025)</span><span class="kv2 vg">+2,103</span></div>
+      <div class="kv"><span class="kk">FCF (2024)</span><span class="kv2 vr">-459</span></div>
+    </div>
+  </div>
+  <div class="alert alert-warn" style="margin-top:12px">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body"><b>재무 구조 핵심 주의:</b> 부채비율 212% · 유동비율 122%로 레버리지가 높음. 금 거래 특성상 매입 재고(유동부채 증가)가 구조적 부채. <b>이자보상배율 24배로 이자 감당 능력은 충분.</b> KCGI 400억 CB 발행(2026.05)으로 전환 시 주식 희석 주의. 지배주주 자본 1,254억 vs 비지배 3,864억 — 연결 실적과 지배주주 귀속 이익 괴리 상존.</div>
+  </div>
+</div>
+
+<!-- ⑤밸류에이션 -->
+<div class="sec" id="ic5">
+  <div class="sec-hd"><span class="sn">05</span><span class="st">밸류에이션 분석</span><div class="sl"></div></div>
+  <div class="tw" style="margin-bottom:12px"><table>
+    <thead><tr><th style="text-align:left">멀티플</th><th>2022A</th><th>2023A</th><th>2024A</th><th>2025A</th><th>BNK 2026E</th></tr></thead>
+    <tbody>
+      <tr><td>PER</td><td>42.09</td><td>234.43</td><td>28.28</td><td class="pos">15.07</td><td class="amb">32.19</td></tr>
+      <tr><td>PBR</td><td>1.74</td><td>2.45</td><td>1.55</td><td class="amb">5.61</td><td>—</td></tr>
+      <tr><td>PCR</td><td>1.72</td><td>25.78</td><td>2.53</td><td class="pos">3.30</td><td>—</td></tr>
+      <tr><td>EV/EBITDA</td><td>2.23</td><td>2.99</td><td>1.92</td><td class="pos">1.71</td><td>—</td></tr>
+      <tr class="hl"><td>EPS (원)</td><td>85</td><td>32</td><td>184</td><td class="pos">2,010</td><td class="pos">1,508E</td></tr>
+      <tr><td>BPS (원)</td><td>2,873</td><td>3,038</td><td>3,358</td><td class="pos">5,404</td><td>—</td></tr>
+      <tr class="hl"><td>FCF (억원)</td><td>1,081</td><td class="neg">-353</td><td class="neg">-459</td><td class="pos">+2,103</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tw" style="margin-bottom:12px"><table>
+    <thead><tr><th style="text-align:left">경쟁사 비교</th><th>아이티센글로벌</th><th>가바아</th><th>솔트룩스</th><th>에스투더블유</th></tr></thead>
+    <tbody>
+      <tr><td>시총 (억원)</td><td class="pos">13,482</td><td>4,315</td><td>2,783</td><td>2,989</td></tr>
+      <tr><td>매출액 (억원)</td><td class="pos">88,708</td><td>3,357</td><td>416</td><td>101</td></tr>
+      <tr><td>영업이익 (억원)</td><td class="pos">2,799</td><td>405</td><td class="neg">-80</td><td class="neg">-56</td></tr>
+      <tr><td>ROE (%)</td><td class="pos">45.89</td><td>9.30</td><td class="neg">-15.27</td><td class="neg">-38.28</td></tr>
+      <tr><td>PER</td><td class="pos">28.90</td><td>27.55</td><td>N/A</td><td>N/A</td></tr>
+      <tr><td>PBR</td><td class="va">10.75</td><td>2.36</td><td>3.95</td><td>12.79</td></tr>
+    </tbody>
+  </table></div>
+  <div class="sbox">
+    <div class="sbox-t">밸류에이션 핵심 판단</div>
+    <p>
+      PER 15배(2025A)는 국내 IT서비스 그룹 대비 <b>매우 저평가</b>. 동종 경쟁사 솔트룩스·에스투더블유는 적자로 PER 산출 불가인 반면, 아이티센글로벌은 ROE 45.9%에 PER 15배 = <b>성장주 치고 파격적 가격.</b>
+      BNK 목표가 68,000원 기준 EPS 1,508원×PER 32배 — 현 주가(58,000원) 대비 +17% 여전히 상승 여력 있음.
+      단, 지배주주 귀속 EPS(2,010원) 기준이 아닌 연결 전체 EPS로 계산 시 희석 효과 고려 필요.
+      <b>EV/EBITDA 1.71배는 초저평가 영역</b> — 사업 가치 대비 시장이 할인 적용 중.
+    </p>
+  </div>
+</div>
+
+<!-- ⑥전망/전략 -->
+<div class="sec" id="ic6">
+  <div class="sec-hd"><span class="sn">06</span><span class="st">주가 전망 및 매수 전략</span><div class="sl"></div></div>
+  <div class="og">
+    <div class="oc">
+      <div class="op">단기 · 1~3개월</div>
+      <div class="opr">55,000~68,000원</div>
+      <div class="od">↑ 반등 구간 · BNK 목표가 68,000 도달 기대</div>
+    </div>
+    <div class="oc gd">
+      <div class="op">연간 · 2026</div>
+      <div class="opr">65,000~80,000원</div>
+      <div class="od">↑↑ 웹3 본격화 + CB 전환 완료 후</div>
+    </div>
+    <div class="oc gd">
+      <div class="op">중기 · 2027</div>
+      <div class="opr">80,000~100,000원</div>
+      <div class="od">↑ 디지털금 생태계 10조 진전 시</div>
+    </div>
+    <div class="oc nu">
+      <div class="op">장기 · 2028~</div>
+      <div class="opr">100,000+원</div>
+      <div class="od">🚀 글로벌 RWA 선도 시나리오</div>
+    </div>
+  </div>
+  <div class="sbox">
+    <div class="sbox-t">매수 전략 (2026.05.08 기준)</div>
+    <p>
+      <b>1차 매수:</b> 55,000~58,000원 (현재 구간) — 고점比 -23% 조정, 이평선 지지 확인.
+      분할 진입 권장.<br>
+      <b>2차 매수:</b> 50,000~52,000원 이탈 시 추가 — 60일선 근접 지지선.<br>
+      <b>손절 기준:</b> 45,000원 이탈 시 포지션 재검토.<br>
+      <b>홀딩 전략:</b> BNK 목표가 68,000원 달성까지 홀딩. 웹3 규제 명확화(2026 하반기) + 금값 상승 지속 시 비중 확대.<br>
+      <b>주의:</b> KCGI CB 400억 전환 시 주식 희석. 2026 하반기 STO 규제 확정 여부가 웹3 사업 가치 결정 핵심 변수.
+    </p>
+  </div>
+</div>
+
+<!-- ⑦경쟁사 -->
+<div class="sec" id="ic7">
+  <div class="sec-hd"><span class="sn">07</span><span class="st">경쟁사 · 동종업종 비교</span><div class="sl"></div></div>
+  <div class="tw"><table>
+    <thead><tr><th style="text-align:left">기업</th><th style="text-align:left">분야</th><th>매출(억)</th><th>영업익(억)</th><th>ROE(%)</th><th>PER</th><th>차별점</th></tr></thead>
+    <tbody>
+      <tr class="ch-row bold"><td>아이티센글로벌 <span class="ctag ctag-o">우리</span></td><td>IT+웹3+금거래</td><td class="pos">88,708</td><td class="pos">2,799</td><td class="pos">45.9</td><td class="pos">15.07</td><td>금 디지털화 독보적</td></tr>
+      <tr><td>가바아</td><td>IT서비스</td><td>3,357</td><td>405</td><td>9.30</td><td>27.55</td><td>기업용 SW 특화</td></tr>
+      <tr><td>솔트룩스</td><td>AI/IT</td><td>416</td><td class="neg">-80</td><td class="neg">-15.3</td><td class="neg">N/A</td><td>AI 전문</td></tr>
+      <tr><td>에스투더블유</td><td>데이터분석</td><td>101</td><td class="neg">-56</td><td class="neg">-38.3</td><td class="neg">N/A</td><td>데이터 분석 전문</td></tr>
+      <tr><td>Freee KK <span class="ctag ctag-l">일본</span></td><td>클라우드 회계</td><td>943</td><td>22</td><td>0.76</td><td>958</td><td>SaaS 모델</td></tr>
+      <tr><td>녹맷테크 <span class="ctag ctag-l">중국</span></td><td>클라우드/IT</td><td>778</td><td>—</td><td>—</td><td class="neg">-64</td><td>중국 시장</td></tr>
+    </tbody>
+  </table></div>
+  <div class="gbox">
+    <div class="gbox-t">경쟁 우위 분석</div>
+    <p>
+      국내 IT서비스 경쟁사 대비 <b>압도적 매출 규모(88,708억 vs 차순위 3,357억)</b>.
+      웹3/RWA 플랫폼(한국금거래소+센골드+금방금방)을 보유한 IT기업은 국내 유일.
+      글로벌 비교사(Freee KK)는 PER 958배인 반면 아이티센글로벌은 15배 — <b>성장성 대비 저평가 구도</b>.
+      단, 비IT(금 거래) 매출이 91.9%로 편중 — 금값 하락 시 실적 타격 직결.
+    </p>
+  </div>
+</div>
+
+<!-- ⑧호재/악재 -->
+<div class="sec" id="ic8">
+  <div class="sec-hd"><span class="sn">08</span><span class="st">호재 · 악재 · 모멘텀</span><div class="sl"></div></div>
+  <div class="bls"><div class="blt">✅ 호재</div><div class="bl">
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>2026 Q1 역대 최대 경신</b> — 매출 1조6,366억(YoY +80%), 영업이익 338억(+772%), 순이익 262억(+1,400%)<a class="src" href="https://www.newsis.com/view/NISX20250516_0003178580" target="_blank" rel="noopener">뉴시스</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>금값 상승 사이클 지속</b> — 중동 지정학 리스크로 안전자산 수요 급증. 2026 1~2월 KRX 금 판매대금 YoY 2배 급증<a class="src" href="https://www.koit.co.kr/news/articleView.html?idxno=205958" target="_blank" rel="noopener">정보통신신문</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>웹3 플랫폼 폭발적 성장</b> — 금방금방 Q1 거래액 QoQ +135%, YoY +202%. 센골드 누적 거래 1조원·회원 118만명<a class="src" href="https://www.newsis.com/view/NISX20250516_0003178580" target="_blank" rel="noopener">뉴시스</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>ROE 45.89%·FCF +2,103억(2025)</b> — 국내 IT기업 중 최상위 자본 효율성. FCF 대규모 흑자전환</div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>日 JPYC·미쓰이물산과 RWA·스테이블코인 동맹</b> — 글로벌 디지털 금 생태계 확장 가속<a class="src" href="https://zdnet.co.kr/view/?no=20260504101817" target="_blank" rel="noopener">ZDNet Korea</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>KCGI 400억 CB 발행(2026.05)</b> — 기관 신뢰도 확인 + STO·웹3 신사업 투자 재원 확보<a class="src" href="https://zdnet.co.kr/view/?no=20260504101817" target="_blank" rel="noopener">ZDNet Korea</a></div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>PER 15배 저평가</b> — 동종 경쟁사 대비 현저한 저평가. BNK 목표가 68,000원 대비 +17% 상승 여력</div></div>
+    <div class="bi3"><div class="dot dg"></div><div class="bt2"><b>AI·웹3 스타트업 5곳 육성 발표(2026.04)</b> — 신성장 파이프라인 다변화</div></div>
+  </div></div>
+  <div class="bls"><div class="blt">⚠️ 악재</div><div class="bl">
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>부채비율 212%</b> — 금 매입 재고 특성상 유동부채 급증. 금리 상승 시 이자 비용 증가</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>비IT 매출 92% 집중</b> — 금값 하락 시 실적 직격. 금 시세 변동이 곧 실적 변동</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>지배주주 귀속 이익 낮음</b> — 지배 467억 vs 비지배 1,516억(2025). 주주가치 관점 희석 우려</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>KCGI CB 400억 전환 희석</b> — 향후 주식 전환 시 주당 가치 희석 가능성</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>STO·웹3 규제 불확실성</b> — 2026 하반기 제도화 여부에 신사업 가치 종속</div></div>
+    <div class="bi3"><div class="dot dr"></div><div class="bt2"><b>채무보증 결정</b> — 감사보고서 저촉 항목. 우발채무 리스크 모니터링 필요</div></div>
+  </div></div>
+  <div class="bls"><div class="blt">🚀 핵심 모멘텀</div><div class="bl">
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>2026 하반기 STO·디지털자산 제도화 확정</b> — 웹3 사업 본격 추진 계기. 규제 리스크 해소 시 밸류 급상승<a class="src" href="https://zdnet.co.kr/view/?no=20260504101817" target="_blank" rel="noopener">ZDNet Korea</a></div></div>
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>글로벌 금값 상승 지속</b> — 트럼프 관세 불확실성 + 중동 리스크 + 달러 약세 복합 요인</div></div>
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>KCGI 투자 확정</b> — 5,000억 규모 블라인드 펀드 참여. 기관 신뢰 확인</div></div>
+    <div class="bi3"><div class="dot db"></div><div class="bt2"><b>AI·피지컬AI 인프라 수요</b> — 씨티에스 AI 데이터센터 사업 반전 기대 (적자 자회사 → AI인프라로 전환)<a class="src" href="https://zdnet.co.kr/view/?no=20250516153022" target="_blank" rel="noopener">ZDNet Korea</a></div></div>
+  </div></div>
+</div>
+
+<!-- ⑨리스크 -->
+<div class="sec" id="ic9">
+  <div class="sec-hd"><span class="sn">09</span><span class="st">리스크 체크리스트</span><div class="sl"></div></div>
+  <div class="rg">
+    <div class="ri"><div class="rs rsh">8</div><div><div class="rn">금값 하락 리스크</div><div class="rd2">매출 92%가 금 거래 의존. 금값 20% 하락 시 실적 직격</div></div></div>
+    <div class="ri"><div class="rs rsh">7</div><div><div class="rn">부채 레버리지</div><div class="rd2">부채비율 212%. 금 매입 구조적 부채 + CB 추가</div></div></div>
+    <div class="ri"><div class="rs rsm">6</div><div><div class="rn">CB 희석 리스크</div><div class="rd2">KCGI 400억 CB 전환 시 주당 가치 희석</div></div></div>
+    <div class="ri"><div class="rs rsm">6</div><div><div class="rn">웹3 규제 불확실</div><div class="rd2">STO 제도화 지연 시 신사업 모멘텀 약화</div></div></div>
+    <div class="ri"><div class="rs rsm">5</div><div><div class="rn">지배주주 이익 괴리</div><div class="rd2">연결 이익의 80%가 비지배 귀속 구조</div></div></div>
+    <div class="ri"><div class="rs rsm">4</div><div><div class="rn">채무보증 우발채무</div><div class="rd2">감사보고서 저촉 항목. 우발채무 현실화 주의</div></div></div>
+    <div class="ri"><div class="rs rsl">3</div><div><div class="rn">유동성 리스크</div><div class="rd2">현금 3,972억. 이자보상배율 24배 — 안전</div></div></div>
+    <div class="ri"><div class="rs rsl">2</div><div><div class="rn">경쟁 위협</div><div class="rd2">금 디지털 플랫폼 국내 1위. 진입장벽 높음</div></div></div>
+  </div>
+  <div style="margin-top:12px;background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+    <span style="font-family:var(--fm);font-size:12px;color:var(--mu)">종합 리스크 점수</span>
+    <div class="rtbar"><div class="rtfill" style="width:41%"></div></div>
+    <span style="font-family:var(--fd);font-size:26px;color:var(--ac)">41/100</span>
+    <span style="font-family:var(--fm);font-size:11px;color:var(--mu)">(중간 리스크 · 금값 연동 사업 특성)</span>
+  </div>
+</div>
+
+<!-- ⑩타임라인 -->
+<div class="sec" id="ic10">
+  <div class="sec-hd"><span class="sn">10</span><span class="st">뉴스 · 공시 타임라인</span><div class="sl"></div></div>
+  <div class="tline">
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2026.05.04</div>
+      <div class="tltitle">KCGI 400억 전환사채(CB) 발행 결정 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">5,000억 블라인드 펀드 KCGI 참여. STO·웹3 신사업 투자 재원 확보. 재무구조 안정화 + 신사업 투자 가속화<a class="src" href="https://zdnet.co.kr/view/?no=20260504101817" target="_blank" rel="noopener">ZDNet Korea</a></div>
+    </div>
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2026.04.15</div>
+      <div class="tltitle">AI·웹3 스타트업 5곳 육성 발표 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">신성장 파이프라인 다변화. AI·웹3 융합 스타트업 육성으로 미래 사업 기반 구축<a class="src" href="https://zdnet.co.kr/view/?no=20260504101817" target="_blank" rel="noopener">ZDNet Korea</a></div>
+    </div>
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2026.03.05</div>
+      <div class="tltitle">2025 연간 사상 최대 실적 발표 <span class="tltag tg">어닝서프라이즈</span></div>
+      <div class="tlbody">매출 8.87조(YoY +79%), 영업이익 2,800억(+378%), 순이익 1,983억(+449%). 웹3+IT서비스 시너지 숫자로 증명<a class="src" href="https://www.etnews.com/20260305000149" target="_blank" rel="noopener">전자신문</a></div>
+    </div>
+    <div class="tli"><div class="tld g"></div>
+      <div class="tldate">2026.02.13</div>
+      <div class="tltitle">日 JPYC·미쓰이물산과 RWA·스테이블코인 동맹 강화 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">일본 최대 스테이블코인(JPYC)·종합상사(미쓰이물산)와 글로벌 디지털 금·RWA 생태계 확장 협력<a class="src" href="https://zdnet.co.kr/view/?no=20260504101817" target="_blank" rel="noopener">ZDNet Korea</a></div>
+    </div>
+    <div class="tli"><div class="tld"></div>
+      <div class="tldate">2025.05.16</div>
+      <div class="tltitle">2025 Q1 역대 최대 실적 발표 <span class="tltag tg">호재</span></div>
+      <div class="tlbody">매출 1.64조(YoY +80%), 영업이익 338억(+772%), 순이익 262억(+1,400%). 금방금방 거래액 YoY +202%<a class="src" href="https://www.newsis.com/view/NISX20250516_0003178580" target="_blank" rel="noopener">뉴시스</a></div>
+    </div>
+    <div class="tli"><div class="tld b"></div>
+      <div class="tldate">2026 하반기 (예정)</div>
+      <div class="tltitle">STO·디지털자산 제도화 확정 기대 <span class="tltag tp">핵심 촉매</span></div>
+      <div class="tlbody">디지털자산 관련 규제 확정 시 웹3 사업 본격 추진. 골드스테이션·GPC 토큰 상용화 가속. 주가 리레이팅 촉매</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /.pcontent -->
+</div><!-- /#p1 -->
+<!-- END PANEL 1 -->
+
+<!-- ████ PANEL 2: 큐리옥스바이오시스템즈 ████ -->
+<div class="panel" id="p2">
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row"><span class="badge bb">바이오</span><span class="pdate">분석일 업데이트 예정</span></div>
+    <div class="pname">큐리옥스바이오시스템즈</div>
+    <div class="pcode">445680 · KOSDAQ</div>
+    <div class="pdesc">라미나르 워시 세포분석 자동화 · Revvity OEM</div>
+  </div>
+  <div class="phero-r"><div class="kpi"><div class="kpi-l">52주고/저</div><div class="kpi-v ka">149,200/15,430</div></div><div class="kpi"><div class="kpi-l">시총</div><div class="kpi-v ">약 1,600억</div></div><div class="kpi"><div class="kpi-l">Revvity OEM</div><div class="kpi-v kg">계약 체결</div></div><div class="kpi"><div class="kpi-l">주요 고객</div><div class="kpi-v ">스탠퍼드·Revvity</div></div><div class="kpi"><div class="kpi-l">중국 계약</div><div class="kpi-v kg">체결 완료</div></div><div class="kpi"><div class="kpi-l">리스크</div><div class="kpi-v kr">★★★★★</div></div></div>
+</div>
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on">차트</div><div class="sb">실적</div><div class="sb">전망·전략</div><div class="sb">호재/악재</div>
+</div></div>
+<div class="pcontent">
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">01</span><span class="st">차트 (이미지 업로드)</span><div class="sl"></div></div>
+    <div class="nb"><p>📷 <b>images/curiox_daily.png</b> · <b>images/curiox_supply.png</b> 업로드 시 자동 표시됩니다</p></div>
+    <div class="cw">
+      <div class="ch"><span class="chl">일봉 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/curiox_daily.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/curiox_daily.png<br>일봉 차트 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+    <div class="cw">
+      <div class="ch"><span class="chl">수급 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/curiox_supply.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📊</div><div class="cph-t">images/curiox_supply.png<br>수급 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">02</span><span class="st">실적 · 전망</span><div class="sl"></div></div>
+    <div class="nb"><p>📊 데이터 이미지 업로드 후 상세 분석 업데이트 예정입니다</p></div>
+    <div class="og">
+      <div class="oc wn"><div class="op">단기</div><div class="opr">업로드 후 업데이트</div><div class="od">↔ 분석 준비 중</div></div>
+      <div class="oc"><div class="op">연간 2026</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc gd"><div class="op">중기 2027</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc nu"><div class="op">장기 2028~</div><div class="opr">업로드 후 업데이트</div><div class="od">🚀 분석 준비 중</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">03</span><span class="st">리스크 점수</span><div class="sl"></div></div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">데이터 업로드 후 산정 예정</span>
+      <div class="rtbar"><div class="rtfill" style="width:0%"></div></div>
+      <span style="font-family:var(--fd);font-size:26px;color:var(--mu)">—/100</span>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- END PANEL 2 -->
+
+<!-- ████ PANEL 3: 큐리오시스 ████ -->
+<div class="panel" id="p3">
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row"><span class="badge bb">바이오</span><span class="pdate">분석일 업데이트 예정</span></div>
+    <div class="pname">큐리오시스</div>
+    <div class="pcode">494120 · KOSDAQ</div>
+    <div class="pdesc">랩 오토메이션 · Revvity ODM · 세포이미징</div>
+  </div>
+  <div class="phero-r"><div class="kpi"><div class="kpi-l">현재가</div><div class="kpi-v ka">55,400원</div></div><div class="kpi"><div class="kpi-l">2026E 매출</div><div class="kpi-v kg">160억(+119%)</div></div><div class="kpi"><div class="kpi-l">외국인보유율</div><div class="kpi-v ka">4.15%</div></div><div class="kpi"><div class="kpi-l">부채비율</div><div class="kpi-v kg">21.4%</div></div><div class="kpi"><div class="kpi-l">흑자전환</div><div class="kpi-v ">2026 Q4 목표</div></div><div class="kpi"><div class="kpi-l">리스크</div><div class="kpi-v kr">★★★★</div></div></div>
+</div>
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on">차트</div><div class="sb">실적</div><div class="sb">전망·전략</div><div class="sb">호재/악재</div>
+</div></div>
+<div class="pcontent">
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">01</span><span class="st">차트 (이미지 업로드)</span><div class="sl"></div></div>
+    <div class="nb"><p>📷 <b>images/curiosis_daily.png</b> · <b>images/curiosis_supply.png</b> 업로드 시 자동 표시됩니다</p></div>
+    <div class="cw">
+      <div class="ch"><span class="chl">일봉 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/curiosis_daily.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/curiosis_daily.png<br>일봉 차트 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+    <div class="cw">
+      <div class="ch"><span class="chl">수급 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/curiosis_supply.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📊</div><div class="cph-t">images/curiosis_supply.png<br>수급 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">02</span><span class="st">실적 · 전망</span><div class="sl"></div></div>
+    <div class="nb"><p>📊 데이터 이미지 업로드 후 상세 분석 업데이트 예정입니다</p></div>
+    <div class="og">
+      <div class="oc wn"><div class="op">단기</div><div class="opr">업로드 후 업데이트</div><div class="od">↔ 분석 준비 중</div></div>
+      <div class="oc"><div class="op">연간 2026</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc gd"><div class="op">중기 2027</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc nu"><div class="op">장기 2028~</div><div class="opr">업로드 후 업데이트</div><div class="od">🚀 분석 준비 중</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">03</span><span class="st">리스크 점수</span><div class="sl"></div></div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">데이터 업로드 후 산정 예정</span>
+      <div class="rtbar"><div class="rtfill" style="width:0%"></div></div>
+      <span style="font-family:var(--fd);font-size:26px;color:var(--mu)">—/100</span>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- END PANEL 3 -->
+
+<!-- ████ PANEL 4: 세아제강지주 ████ -->
+<div class="panel" id="p4">
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row"><span class="badge ben">에너지</span><span class="pdate">분석일 업데이트 예정</span></div>
+    <div class="pname">세아제강지주</div>
+    <div class="pcode">003030 · KOSPI</div>
+    <div class="pdesc">OCTG·LNG 강관 · 알래스카 LNG 수혜 · SSUSA 풀가동</div>
+  </div>
+  <div class="phero-r"><div class="kpi"><div class="kpi-l">현재가</div><div class="kpi-v ka">214,000원</div></div><div class="kpi"><div class="kpi-l">PER(2025A)</div><div class="kpi-v kg">8배</div></div><div class="kpi"><div class="kpi-l">PBR</div><div class="kpi-v kg">0.5배</div></div><div class="kpi"><div class="kpi-l">부채비율</div><div class="kpi-v kg">23.6%</div></div><div class="kpi"><div class="kpi-l">2025 OPM</div><div class="kpi-v ">5.5%</div></div><div class="kpi"><div class="kpi-l">52주고/저</div><div class="kpi-v ">292,500/182,000</div></div></div>
+</div>
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on">차트</div><div class="sb">실적</div><div class="sb">전망·전략</div><div class="sb">호재/악재</div>
+</div></div>
+<div class="pcontent">
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">01</span><span class="st">차트 (이미지 업로드)</span><div class="sl"></div></div>
+    <div class="nb"><p>📷 <b>images/seah_daily.png</b> · <b>images/seah_supply.png</b> 업로드 시 자동 표시됩니다</p></div>
+    <div class="cw">
+      <div class="ch"><span class="chl">일봉 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/seah_daily.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/seah_daily.png<br>일봉 차트 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+    <div class="cw">
+      <div class="ch"><span class="chl">수급 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/seah_supply.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📊</div><div class="cph-t">images/seah_supply.png<br>수급 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">02</span><span class="st">실적 · 전망</span><div class="sl"></div></div>
+    <div class="nb"><p>📊 데이터 이미지 업로드 후 상세 분석 업데이트 예정입니다</p></div>
+    <div class="og">
+      <div class="oc wn"><div class="op">단기</div><div class="opr">업로드 후 업데이트</div><div class="od">↔ 분석 준비 중</div></div>
+      <div class="oc"><div class="op">연간 2026</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc gd"><div class="op">중기 2027</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc nu"><div class="op">장기 2028~</div><div class="opr">업로드 후 업데이트</div><div class="od">🚀 분석 준비 중</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">03</span><span class="st">리스크 점수</span><div class="sl"></div></div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">데이터 업로드 후 산정 예정</span>
+      <div class="rtbar"><div class="rtfill" style="width:0%"></div></div>
+      <span style="font-family:var(--fd);font-size:26px;color:var(--mu)">—/100</span>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- END PANEL 4 -->
+
+<!-- ████ PANEL 5: 비츠로셀 ████ -->
+<div class="panel" id="p5">
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row"><span class="badge bd2b">방산</span><span class="pdate">분석일 업데이트 예정</span></div>
+    <div class="pname">비츠로셀</div>
+    <div class="pcode">082920 · KOSDAQ</div>
+    <div class="pdesc">방산 고온전지 글로벌 1위 · 미 국방부 논의</div>
+  </div>
+  <div class="phero-r"><div class="kpi"><div class="kpi-l">현재가</div><div class="kpi-v ka">56,600원</div></div><div class="kpi"><div class="kpi-l">2025 OPM</div><div class="kpi-v kg">28.4%</div></div><div class="kpi"><div class="kpi-l">수출비중</div><div class="kpi-v kg">80%</div></div><div class="kpi"><div class="kpi-l">부채비율</div><div class="kpi-v kg">12.2%</div></div><div class="kpi"><div class="kpi-l">2025 영업익</div><div class="kpi-v ">689억</div></div><div class="kpi"><div class="kpi-l">52주고/저</div><div class="kpi-v ">59,900/24,300</div></div></div>
+</div>
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on">차트</div><div class="sb">실적</div><div class="sb">전망·전략</div><div class="sb">호재/악재</div>
+</div></div>
+<div class="pcontent">
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">01</span><span class="st">차트 (이미지 업로드)</span><div class="sl"></div></div>
+    <div class="nb"><p>📷 <b>images/bitsrocell_daily.png</b> · <b>images/bitsrocell_supply.png</b> 업로드 시 자동 표시됩니다</p></div>
+    <div class="cw">
+      <div class="ch"><span class="chl">일봉 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/bitsrocell_daily.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/bitsrocell_daily.png<br>일봉 차트 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+    <div class="cw">
+      <div class="ch"><span class="chl">수급 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/bitsrocell_supply.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📊</div><div class="cph-t">images/bitsrocell_supply.png<br>수급 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">02</span><span class="st">실적 · 전망</span><div class="sl"></div></div>
+    <div class="nb"><p>📊 데이터 이미지 업로드 후 상세 분석 업데이트 예정입니다</p></div>
+    <div class="og">
+      <div class="oc wn"><div class="op">단기</div><div class="opr">업로드 후 업데이트</div><div class="od">↔ 분석 준비 중</div></div>
+      <div class="oc"><div class="op">연간 2026</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc gd"><div class="op">중기 2027</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc nu"><div class="op">장기 2028~</div><div class="opr">업로드 후 업데이트</div><div class="od">🚀 분석 준비 중</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">03</span><span class="st">리스크 점수</span><div class="sl"></div></div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">데이터 업로드 후 산정 예정</span>
+      <div class="rtbar"><div class="rtfill" style="width:0%"></div></div>
+      <span style="font-family:var(--fd);font-size:26px;color:var(--mu)">—/100</span>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- END PANEL 5 -->
+
+<!-- ████ PANEL 6: 프로티나 ████ -->
+<div class="panel" id="p6">
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row"><span class="badge bb">바이오</span><span class="pdate">분석일 업데이트 예정</span></div>
+    <div class="pname">프로티나</div>
+    <div class="pcode">468530 · KOSDAQ</div>
+    <div class="pdesc">AI 항체 설계 + 50만 PPI 빅데이터</div>
+  </div>
+  <div class="phero-r"><div class="kpi"><div class="kpi-l">현재가</div><div class="kpi-v ka">63,500원</div></div><div class="kpi"><div class="kpi-l">외국인보유율</div><div class="kpi-v ka">3.00%</div></div><div class="kpi"><div class="kpi-l">국책과제</div><div class="kpi-v kg">136억</div></div><div class="kpi"><div class="kpi-l">협력사</div><div class="kpi-v ">삼성바이오에피스</div></div><div class="kpi"><div class="kpi-l">흑자전환</div><div class="kpi-v ">2027E</div></div><div class="kpi"><div class="kpi-l">52주고/저</div><div class="kpi-v ">120,100/13,560</div></div></div>
+</div>
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on">차트</div><div class="sb">실적</div><div class="sb">전망·전략</div><div class="sb">호재/악재</div>
+</div></div>
+<div class="pcontent">
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">01</span><span class="st">차트 (이미지 업로드)</span><div class="sl"></div></div>
+    <div class="nb"><p>📷 <b>images/protina_daily.png</b> · <b>images/protina_supply.png</b> 업로드 시 자동 표시됩니다</p></div>
+    <div class="cw">
+      <div class="ch"><span class="chl">일봉 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/protina_daily.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/protina_daily.png<br>일봉 차트 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+    <div class="cw">
+      <div class="ch"><span class="chl">수급 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/protina_supply.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📊</div><div class="cph-t">images/protina_supply.png<br>수급 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">02</span><span class="st">실적 · 전망</span><div class="sl"></div></div>
+    <div class="nb"><p>📊 데이터 이미지 업로드 후 상세 분석 업데이트 예정입니다</p></div>
+    <div class="og">
+      <div class="oc wn"><div class="op">단기</div><div class="opr">업로드 후 업데이트</div><div class="od">↔ 분석 준비 중</div></div>
+      <div class="oc"><div class="op">연간 2026</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc gd"><div class="op">중기 2027</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc nu"><div class="op">장기 2028~</div><div class="opr">업로드 후 업데이트</div><div class="od">🚀 분석 준비 중</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">03</span><span class="st">리스크 점수</span><div class="sl"></div></div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">데이터 업로드 후 산정 예정</span>
+      <div class="rtbar"><div class="rtfill" style="width:0%"></div></div>
+      <span style="font-family:var(--fd);font-size:26px;color:var(--mu)">—/100</span>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- END PANEL 6 -->
+
+<!-- ████ PANEL 7: 로킷헬스케어 ████ -->
+<div class="panel" id="p7">
+<div class="phero">
+  <div class="phero-l">
+    <div class="badge-row"><span class="badge bmed">재생의료</span><span class="pdate">분석일 업데이트 예정</span></div>
+    <div class="pname">로킷헬스케어</div>
+    <div class="pcode">376900 · KOSDAQ</div>
+    <div class="pdesc">AI 장기재생 플랫폼 세계 최초 상용화</div>
+  </div>
+  <div class="phero-r"><div class="kpi"><div class="kpi-l">2025 매출 YoY</div><div class="kpi-v kg">+100%</div></div><div class="kpi"><div class="kpi-l">영업이익</div><div class="kpi-v kg">흑자전환</div></div><div class="kpi"><div class="kpi-l">국내 임상</div><div class="kpi-v kg">11개 병원</div></div><div class="kpi"><div class="kpi-l">상용화 목표</div><div class="kpi-v ka">2026 H2</div></div><div class="kpi"><div class="kpi-l">기술방식</div><div class="kpi-v ">AI+3D바이오프린팅</div></div><div class="kpi"><div class="kpi-l">코스닥 상장</div><div class="kpi-v ">2025년</div></div></div>
+</div>
+<div class="secnav"><div class="secnav-in">
+  <div class="sb on">차트</div><div class="sb">실적</div><div class="sb">전망·전략</div><div class="sb">호재/악재</div>
+</div></div>
+<div class="pcontent">
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">01</span><span class="st">차트 (이미지 업로드)</span><div class="sl"></div></div>
+    <div class="nb"><p>📷 <b>images/rokit_daily.png</b> · <b>images/rokit_supply.png</b> 업로드 시 자동 표시됩니다</p></div>
+    <div class="cw">
+      <div class="ch"><span class="chl">일봉 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/rokit_daily.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📈</div><div class="cph-t">images/rokit_daily.png<br>일봉 차트 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+    <div class="cw">
+      <div class="ch"><span class="chl">수급 차트</span><span class="chr">업로드 대기</span></div>
+      <div class="cb">
+        <img src="images/rokit_supply.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cph" style="display:none"><div class="cph-i">📊</div><div class="cph-t">images/rokit_supply.png<br>수급 이미지 업로드 필요</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">02</span><span class="st">실적 · 전망</span><div class="sl"></div></div>
+    <div class="nb"><p>📊 데이터 이미지 업로드 후 상세 분석 업데이트 예정입니다</p></div>
+    <div class="og">
+      <div class="oc wn"><div class="op">단기</div><div class="opr">업로드 후 업데이트</div><div class="od">↔ 분석 준비 중</div></div>
+      <div class="oc"><div class="op">연간 2026</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc gd"><div class="op">중기 2027</div><div class="opr">업로드 후 업데이트</div><div class="od">↑ 분석 준비 중</div></div>
+      <div class="oc nu"><div class="op">장기 2028~</div><div class="opr">업로드 후 업데이트</div><div class="od">🚀 분석 준비 중</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-hd"><span class="sn">03</span><span class="st">리스크 점수</span><div class="sl"></div></div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <span style="font-family:var(--fm);font-size:10px;color:var(--mu)">데이터 업로드 후 산정 예정</span>
+      <div class="rtbar"><div class="rtfill" style="width:0%"></div></div>
+      <span style="font-family:var(--fd);font-size:26px;color:var(--mu)">—/100</span>
+    </div>
+  </div>
+
+</div>
+</div>
+<!-- END PANEL 7 -->
+</div><!-- /.panels -->
+
+<div class="pfooter">
+  <b>PORT STUDY</b> · Woochun-Jang / port_study · GitHub Pages<br>
+  투자는 본인 책임입니다. 본 자료는 개인 연구 목적이며 투자 권유가 아닙니다.
+</div>
+
+<script>
+/* ── 탭 전환 ── */
+function sw(idx){
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('on',i===idx));
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('on',i===idx));
+  window.scrollTo({top:0,behavior:'smooth'});
+  history.replaceState(null,'',`#s${idx}`);
+}
+
+/* ── 섹션 스크롤 ── */
+function ss(id,btn){
+  const el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  if(btn){
+    const p=btn.closest('.secnav-in');
+    if(p){ p.querySelectorAll('.sb').forEach(b=>b.classList.remove('on')); btn.classList.add('on'); }
+  }
+}
+
+/* ── 해시 복원 ── */
+(function(){const h=location.hash.match(/s(\d)/);if(h)sw(parseInt(h[1]));})();
+
+/* ── 토모큐브 밸류에이션 ── */
+const TC_S=13323195, TC_C=54400;
+function tcC(){
+  const e=parseInt(document.getElementById('tc-e').value);
+  const p=parseInt(document.getElementById('tc-p').value);
+  const t=Math.round(e*p/1000)*1000;
+  const pct=((t-TC_C)/TC_C*100).toFixed(1);
+  const el=document.getElementById('tc-r');
+  el.textContent=t.toLocaleString()+'원';
+  el.style.color=pct>=0?'var(--gn)':'var(--rd)';
+  document.getElementById('tc-rp').textContent=`현재가(${TC_C.toLocaleString()}원) 대비 ${pct>=0?'+':''}${pct}%`;
+}
+function tcPSR(){
+  const r=parseInt(document.getElementById('tc-re').value)*1e8;
+  const p=parseInt(document.getElementById('tc-psr').value);
+  const t=Math.round(r*p/TC_S/1000)*1000;
+  const pct=((t-TC_C)/TC_C*100).toFixed(1);
+  const el=document.getElementById('tc-pr');
+  el.textContent=t.toLocaleString()+'원';
+  el.style.color=pct>=0?'var(--gn)':'var(--rd)';
+  document.getElementById('tc-prp').textContent=`현재가(${TC_C.toLocaleString()}원) 대비 ${pct>=0?'+':''}${pct}%`;
+}
+if(document.getElementById('tc-e')){ tcC(); tcPSR(); }
+
+/* ── 스크롤 시 섹션 네비 하이라이트 ── */
+window.addEventListener('scroll',()=>{
+  const panel=document.querySelector('.panel.on');
+  if(!panel) return;
+  const secs=panel.querySelectorAll('.sec[id]');
+  const nav=panel.querySelector('.secnav-in');
+  if(!nav) return;
+  let cur='';
+  secs.forEach(s=>{if(s.getBoundingClientRect().top<130)cur=s.id;});
+  if(cur){
+    const secEl=panel.querySelector('#'+cur+' .st');
+    const secTitle=secEl?secEl.textContent.trim().slice(0,4):'';
+    nav.querySelectorAll('.sb').forEach(b=>{
+      b.classList.toggle('on', b.textContent.trim().startsWith(secTitle.slice(0,2)));
+    });
+  }
+},{passive:true});
+</script>
+</body>
+</html>
